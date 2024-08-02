@@ -5,12 +5,17 @@ import { ProjectComponent } from './project/project.component';
 import { UserChatComponent } from './user-chat/user-chat.component';
 import { ProfileComponent } from './profile/profile.component';
 import { NotificationComponent } from './notification/notification.component';
+import { MainLayoutComponent } from './main-layout/main-layout.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    component: MainLayoutComponent,
     children: [
+      {
+        path: 'home',
+        component: HomeComponent,
+      },
       {
         path: 'project',
         component: ProjectComponent,
@@ -26,6 +31,11 @@ const routes: Routes = [
       {
         path: 'notification',
         component: NotificationComponent,
+      },
+      {
+        path: '',
+        component: HomeComponent,
+        pathMatch: 'full',
       },
     ],
   },
