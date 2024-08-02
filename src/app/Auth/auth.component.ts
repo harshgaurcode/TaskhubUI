@@ -5,9 +5,4 @@ import { UserLoginModel } from '../shared/Models/userLoginModel';
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css',
 })
-export class AuthComponent {
-  LoginCred: UserLoginModel = new UserLoginModel();
-  onLogin() {
-    console.log(this.LoginCred);
-  }
-}
+export class AuthComponent {}
