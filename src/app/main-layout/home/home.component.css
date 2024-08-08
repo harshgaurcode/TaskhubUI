@@ -1,0 +1,98 @@
+/* Add this to your styles.css or component-specific CSS file */
+
+.container {
+  margin-top: 20px;
+}
+
+.content-wrapper,
+.chatlist,
+.border {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.chatlist h2 {
+  margin-bottom: 20px;
+}
+
+.chat-list a {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.3s;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+}
+
+.chat-list a:hover {
+  background-color: #e9ecef;
+}
+
+.chat-list img {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.chat-list h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.chat-list p {
+  margin: 0;
+  color: #6c757d;
+}
+/* Add this to your styles.css or component-specific CSS file */
+
+.container {
+  margin-top: 20px;
+}
+
+.content-wrapper,
+.chatlist,
+.border {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.chatlist h2 {
+  margin-bottom: 20px;
+}
+
+.chat-list a {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.3s;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+}
+
+.chat-list a:hover {
+  background-color: #e9ecef;
+}
+
+.chat-list img {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.chat-list h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.chat-list p {
+  margin: 0;
+  color: #6c757d;
+}
