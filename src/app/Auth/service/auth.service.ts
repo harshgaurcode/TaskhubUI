@@ -22,10 +22,18 @@ export class AuthService {
     );
   }
 
-  Register(userRegisterModel: UserRegisterModel): Observable<ApiResponse<any>> {
+  Register(userRegisterModel: any): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(
       `${environment.apiBaseUrl}/api/Auth/Register`,
       userRegisterModel
     );
+  }
+
+  logout(): Observable<void> {
+    // Implement actual logout logic
+    // For example, clearing token or calling backend endpoint
+    localStorage.removeItem('Token');
+    localStorage.removeItem('User');
+    return this.http.post<void>(this.apiUrl, {});
   }
 }

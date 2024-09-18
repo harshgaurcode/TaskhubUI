@@ -4,7 +4,6 @@ import { AuthService } from '../service/auth.service';
 import { ApiResponse } from '../../shared/Models/ApiResponse';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { PopupService } from '../../shared/popups/popupservice';
 import { AuthResult } from '../../shared/Models/AuthResponse';
 
 @Component({
@@ -14,27 +13,8 @@ import { AuthResult } from '../../shared/Models/AuthResponse';
 })
 export class LoginComponent {
   isPopupVisible = false;
-  constructor(
-    private authservice: AuthService,
-    private router: Router,
-    private popupService: PopupService
-  ) {}
+  constructor(private authservice: AuthService, private router: Router) {}
 
-  // //Popup
-  // ngOnInit(): void {
-  //   this.popupDisplay.popupVisibility$.subscribe(
-  //     (isVisible) => (this.isPopupVisible = isVisible)
-  //   );
-  // }
-
-  // showPopup(): void {
-  //   this.popupService.showPopup();
-  // }
-
-  // hidePopup(): void {
-  //   this.popupService.hidePopup();
-  // }
-  // /////////
   LoginCred: UserLoginModel = new UserLoginModel();
   popupDisplay: Subject<boolean> = new Subject<boolean>();
   onLogin() {
@@ -43,7 +23,7 @@ export class LoginComponent {
         if (response.isSuccess) {
           console.log('Login Successfull', response.result);
           localStorage.setItem('Token', response.result.token);
-
+          localStorage.setItem('User', response.result.user.userName);
           this.router.navigateByUrl('main');
         } else {
           console.log('Login Failed');

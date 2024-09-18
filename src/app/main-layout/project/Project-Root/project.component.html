@@ -1,0 +1,46 @@
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar Navigation -->
+    <div class="col-sm-auto bg-light sticky-top">
+      <div
+        class="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top"
+      >
+        <ul
+          class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center align-items-center"
+        >
+          <li class="nav-item">
+            <a
+              href="#"
+              class="nav-link py-3 px-2"
+              title="Home"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              routerLink="./"
+              routerLinkActive="router-link-active"
+            >
+              <i class="bi-house fs-2"></i>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="nav-link py-3 px-2"
+              title="Dashboard"
+              data-bs-toggle="tooltip"
+              data-bs-placement="right"
+              routerLink="./board"
+              routerLinkActive="router-link-active"
+            >
+              <i class="bi bi-kanban fs-2"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="col-sm p-3 min-vh-100">
+      <router-outlet> </router-outlet>
+    </div>
+  </div>
+</div>

@@ -5,9 +5,9 @@ export class UserRegisterModel {
 
   phoneNumber: string = '';
 
-  userProfile: string = '';
+  userProfile: File = {} as File;
 
-  signature: string = '';
+  signature: File = {} as File;
 
   address: string = '';
 

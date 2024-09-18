@@ -1,1 +1,16 @@
-    
+.nav-color {
+  background-color: #8aaae5 !important;
+}
+.text-color {
+  color: #ffff;
+}
+.bg-color {
+  background-color: #fff;
+  min-height: 100vh;
+}
+.btn-color {
+  background-color: #ffd803;
+  color: #272343;
+}
+
+/*  #CADCFC */
