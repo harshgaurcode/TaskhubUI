@@ -1,9 +1,61 @@
-<div class="chat-container">
-  <div class="chat-sidebar">
-    <app-chat-list></app-chat-list>
-  </div>
-  <div class="chat-main">
-    <app-chat-window></app-chat-window>
-    <app-chat-input></app-chat-input>
+<div class="container mt-5">
+  <div class="row">
+    <!-- Connected Users Section -->
+    <div class="col-md-3">
+      <h3 class="text-primary">Connected Users</h3>
+      <ul class="list-group">
+        <li
+          *ngFor="let user of connectedUsers$ | async"
+          (click)="selectUser(user)"
+          class="list-group-item list-group-item-action"
+          [class.active]="user === selectedUser"
+        >
+          {{ user }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Chat Section -->
+    <div class="col-md-9">
+      <div *ngIf="selectedUser">
+        <h3 class="text-secondary">Chat with {{ selectedUser }}</h3>
+        <div
+          class="chat-window border p-3 mb-3"
+          style="height: 300px; overflow-y: scroll"
+        >
+          <div
+            *ngFor="let message of messages$ | async"
+            class="mb-2 d-flex"
+            [ngClass]="{
+              'justify-content-start': message.sender !== username,
+              'justify-content-end': message.sender === username
+            }"
+          >
+            <div
+              class="message p-2"
+              [ngClass]="{
+                'bg-light text-dark': message.sender !== username,
+                'bg-primary text-white': message.sender === username
+              }"
+              style="border-radius: 10px; max-width: 70%"
+            >
+              <strong>{{ message.sender }}:</strong> {{ message.content }}
+              <small class="d-block text-muted">{{
+                message.timestamp | date : "shortTime"
+              }}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input
+            [(ngModel)]="message"
+            placeholder="Type a message..."
+            class="form-control"
+          />
+          <button class="btn btn-primary" (click)="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -4,7 +4,7 @@ import { ProjectDashboardComponent } from './project-dashboard/project-dashboard
 import { ProjectKanbanComponent } from './project-kanban/project-kanban.component';
 import { ProjectRoutingModule } from './project-routing.module';
 import { RouterModule } from '@angular/router';
-import { ProjectComponent } from './Project-Root/project.component';
+import { ProjectComponent } from './project-root-component/project.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 

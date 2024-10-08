@@ -5,6 +5,7 @@ import { environment } from '../../../../environments/environment.development';
 import { ApiResponse } from '../../../shared/Models/ApiResponse';
 import { ProjectListResponse } from '../../../shared/Models/ProjectModel/ProjectListResponse';
 import { addNewProject } from '../../../shared/Models/ProjectModel/addNewProject';
+import { ticketResponseArray } from '../../../shared/Models/TicketModels/ticketResponseArray';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,7 @@ export class ProjectService {
       { headers }
     );
   }
-  AddProject(projectData: addNewProject): Observable<ApiResponse<any>> {
+  AddProject(projectData: any): Observable<ApiResponse<any>> {
     //Pass Jwt from internal storage
     const headers = new HttpHeaders().set(
       'Authorization',
@@ -42,7 +43,7 @@ export class ProjectService {
   }
 
   getquote(): Observable<any> {
-    return this.http.get<any>(`https://zenquotes.io/api/image`);
+    return this.http.get<any>('https://zenquotes.io/api/image');
   }
 
   getdevelopersList(): Observable<any> {
@@ -54,6 +55,29 @@ export class ProjectService {
   getmanagerList(): Observable<any> {
     return this.http.get<any>(
       `${environment.apiBaseUrl}/api/Admin/GetAllManagers`
+    );
+  }
+
+  getticketsbyprojectid(
+    projectId: any
+  ): Observable<ApiResponse<ticketResponseArray[]>> {
+    return this.http.get<ApiResponse<ticketResponseArray[]>>(
+      `${environment.apiBaseUrl}/api/Project/GetTaskById/`,
+      {
+        params: { projectId: projectId },
+      }
+    );
+  }
+
+  AddTicket(ticketData: any) {
+    //Pass Jwt from internal storage
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${this.getToken()}`
+    );
+    return this.http.post<any>(
+      `${environment.apiBaseUrl}/api/Project/CreateTask/`,
+      ticketData
     );
   }
 

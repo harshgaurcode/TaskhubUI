@@ -8,10 +8,18 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { AuthInterceptor } from './Auth-guard/auth-interceptor.interceptor';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+  ],
   providers: [provideHttpClient(withInterceptors([AuthInterceptor]))],
   bootstrap: [AppComponent],
 })

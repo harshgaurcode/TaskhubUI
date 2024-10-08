@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProjectDashboardComponent } from './project-dashboard/project-dashboard.component';
 import { ProjectKanbanComponent } from './project-kanban/project-kanban.component';
-import { ProjectComponent } from './Project-Root/project.component';
+import { ProjectComponent } from './project-root-component/project.component';
 
 const routes: Routes = [
   {

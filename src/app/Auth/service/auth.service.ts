@@ -6,6 +6,7 @@ import { UserRegisterModel } from '../../shared/Models/userRegisterModel';
 import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../../shared/Models/ApiResponse';
 import { AuthResult } from '../../shared/Models/AuthResponse';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ import { AuthResult } from '../../shared/Models/AuthResponse';
 export class AuthService {
   apiUrl = 'https://localhost:7054/api/Auth/Register';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   Login(UserLogin: UserLoginModel): Observable<ApiResponse<AuthResult>> {
     return this.http.post<ApiResponse<any>>(

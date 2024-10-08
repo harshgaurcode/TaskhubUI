@@ -1,3 +1,5 @@
+@import "ngx-toastr/toastr";
+
 .nav-color {
   background-color: #8aaae5 !important;
 }
@@ -9,8 +11,8 @@
   min-height: 100vh;
 }
 .btn-color {
-  background-color: #ffd803;
-  color: #272343;
+  background-color: #e9edf6;
+  color: #fff;
 }
 
 /*  #CADCFC */
