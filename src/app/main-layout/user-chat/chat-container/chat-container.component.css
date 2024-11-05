@@ -1,0 +1,12 @@
+.chat-window {
+  background-color: #f8f9fa; /* Light gray background for the chat area */
+}
+
+.list-group-item:hover {
+  cursor: pointer;
+}
+
+.list-group-item.active {
+  background-color: #0d6efd;
+  color: white;
+}

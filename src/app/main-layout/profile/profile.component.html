@@ -1,1 +1,145 @@
-<p>profile works!</p>
+<div class="container py-4 mt-4 rounded-3">
+  <!-- Profile and Project Info Section -->
+  <div class="row">
+    <!-- Profile Info -->
+    <div class="col-lg-4">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body text-center">
+          <img
+            *ngIf="profileData?.signature"
+            [src]="userSignatureImageUrl"
+            alt="User Profile"
+            class="rounded-circle img-fluid mb-3"
+            style="width: 150px; height: 150px; object-fit: cover"
+          />
+          <h5 class="my-3">{{ profileData.userName || "N/A" }}</h5>
+          <p class="text-muted mb-1">{{ profileData.userRole || "N/A" }}</p>
+          <p class="text-muted mb-4">{{ profileData.address || "N/A" }}</p>
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            (click)="openModal()"
+          >
+            Edit Profile
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Status -->
+    <div class="col-lg-8">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <div class="row mb-2">
+            <div class="col-sm-3">
+              <strong>Full Name:</strong>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">
+                {{ profileData?.userName || "N/A" }}
+              </p>
+            </div>
+          </div>
+          <hr />
+          <div class="row mb-2">
+            <div class="col-sm-3">
+              <strong>Role:</strong>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">
+                {{ profileData?.userRole || "N/A" }}
+              </p>
+            </div>
+          </div>
+          <hr />
+          <div class="row mb-2">
+            <div class="col-sm-3">
+              <strong>Address:</strong>
+            </div>
+            <div class="col-sm-9">
+              <p class="text-muted mb-0">{{ profileData?.address || "N/A" }}</p>
+            </div>
+          </div>
+          <!-- Add additional rows here if needed -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <app-modal [title]="'Edit Profile'">
+    <form>
+      <div class="mb-3">
+        <label for="fullName" class="form-label">Full Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="fullName"
+          name="fullName"
+          [value]="profileData.userName || ''"
+          placeholder="Enter full name"
+          aria-describedby="fullNameHelp"
+        />
+        <div id="fullNameHelp" class="form-text">
+          Your full name as it appears in your profile.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          [value]="profileData.userRole || ''"
+          placeholder="Enter your title"
+          aria-describedby="titleHelp"
+        />
+        <div id="titleHelp" class="form-text">
+          Your current job title or role.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input
+          type="text"
+          class="form-control"
+          id="location"
+          name="location"
+          [value]="profileData.address || ''"
+          placeholder="Enter your location"
+          aria-describedby="locationHelp"
+        />
+        <div id="locationHelp" class="form-text">
+          Your current address or location.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="website" class="form-label">Website</label>
+        <input
+          type="url"
+          class="form-control"
+          id="website"
+          name="website"
+          value=""
+          placeholder="Enter your website URL"
+          aria-describedby="websiteHelp"
+        />
+        <div id="websiteHelp" class="form-text">
+          Your personal or professional website URL.
+        </div>
+      </div>
+      <!-- Add other form fields as needed -->
+    </form>
+    <div class="d-flex justify-content-center">
+      <div class="m-1">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+      <div class="m-1">
+        <button type="button" class="btn btn-primary" (click)="closeModal()">
+          Close
+        </button>
+      </div>
+    </div>
+  </app-modal>
+</div>

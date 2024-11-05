@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg nav-color">
+  <div class="container">
+    <a class="navbar-brand" href="main/home">TaskHub</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link text-color" aria-current="page" routerLink="./"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-color" routerLink="project">Projects</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-color" routerLink="chats">Chats</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-color" routerLink="profile">Profile</a>
+        </li>
+
+        <button
+          class="nav-item btn btn-outline-danger me-md-2"
+          (click)="openModal()"
+        >
+          Logout
+        </button>
+      </ul>
+    </div>
+  </div>
+</nav>
+<router-outlet></router-outlet>
+<app-modal *ngIf="isLogout" [title]="'Do you really want to logout !!'">
+  <div class="d-flex justify-content-center">
+    <div class="m-1">
+      <button type="button" class="btn btn-outline-danger" (click)="logout()">
+        Logout
+      </button>
+    </div>
+    <div class="m-1">
+      <button type="button" class="btn btn-primary" (click)="closeModal()">
+        Close
+      </button>
+    </div>
+  </div>
+</app-modal>

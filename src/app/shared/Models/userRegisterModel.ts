@@ -1,17 +1,19 @@
 export class UserRegisterModel {
-  Name: string = '';
+  name: string = '';
 
-  Email: string = '';
+  email: string = '';
 
-  PhoneNumber: string = '';
+  phoneNumber: string = '';
 
-  UserProfile: string = '';
+  userProfile: File = {} as File;
 
-  Signature: string = '';
+  signature: File = {} as File;
 
-  Address: string = '';
+  address: string = '';
 
-  AlternateContact: string = '';
+  alternateContact: string = '';
 
-  UserFamily: string = '';
+  userName: string = '';
+
+  password: string = '';
 }

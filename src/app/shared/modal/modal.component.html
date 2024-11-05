@@ -1,0 +1,9 @@
+<div *ngIf="isOpen" class="custom-modal">
+  <div class="custom-modal-content">
+    <h5 class="modal-title">{{ title }}</h5>
+    <hr />
+    <div class="modal-body">
+      <ng-content class="content"></ng-content>
+    </div>
+  </div>
+</div>

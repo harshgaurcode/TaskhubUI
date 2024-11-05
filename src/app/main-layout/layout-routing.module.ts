@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { ProjectComponent } from './project/project.component';
-import { UserChatComponent } from './user-chat/user-chat.component';
+
 import { ProfileComponent } from './profile/profile.component';
 import { NotificationComponent } from './notification/notification.component';
-import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { MainLayoutComponent } from './root/main-layout.component';
 
 const routes: Routes = [
   {
@@ -18,11 +17,15 @@ const routes: Routes = [
       },
       {
         path: 'project',
-        component: ProjectComponent,
+        loadChildren: () =>
+          import('./project/project.module').then((m) => m.ProjectModule),
       },
       {
         path: 'chats',
-        component: UserChatComponent,
+        loadChildren: () =>
+          import('./user-chat/chat-module.module').then(
+            (m) => m.ChatModuleModule
+          ),
       },
       {
         path: 'profile',

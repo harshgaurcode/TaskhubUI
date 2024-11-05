@@ -1,0 +1,27 @@
+<h2>Pending Requests</h2>
+
+<ul class="list-group" *ngFor="let item of request">
+  <li class="list-group-item d-flex justify-content-between">
+    <span class="m1"
+      >{{ item.name }} ({{ item.userName }}) - {{ item.phoneNumber }}</span
+    >
+    <span>
+      <select class="form-select-sm mx-2" [(ngModel)]="item.RoleId">
+        <option *ngFor="let role of role" [value]="role.roleId">
+          {{ role.role }}
+        </option>
+      </select>
+    </span>
+    <span>
+      <button
+        class="btn btn-success btn-sm m-1"
+        (click)="approveRequest(item.id, item.RoleId)"
+      >
+        Approve
+      </button>
+      <button class="btn btn-danger btn-sm m-2" (click)="deleteUser(item.id)">
+        Delete
+      </button>
+    </span>
+  </li>
+</ul>

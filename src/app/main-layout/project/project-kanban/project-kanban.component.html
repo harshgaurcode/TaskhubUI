@@ -1,0 +1,214 @@
+<div class="container-fluid pt-2">
+  <div
+    *ngIf="loading"
+    class="d-flex justify-content-center align-items-center"
+    style="height: 200px"
+  >
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div *ngIf="!loading">
+    <div class="row pt-5">
+      <div class="col-12">
+        <div class="d-flex justify-content-between">
+          <div>
+            <h4>Project Name : {{ selectedProjectData.projectName }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row pt-1">
+      <div
+        class="col"
+        id="3"
+        *ngFor="let staus of status"
+        (dragover)="onDragOver($event)"
+        (drop)="onDrop($event, staus)"
+      >
+        <div class="card card-bg">
+          <div class="card-header border-0 py-1">
+            {{ staus }} <span> </span
+            ><!---->
+          </div>
+          <div class="card-body ticket-bg border" id="3">
+            <!---->
+            <div
+              draggable="true"
+              *ngFor="let ticket of filterTicket(staus)"
+              class="card-Body-Hover m-1 rounded-1 task"
+              (dragstart)="onDragStart(ticket.taskId)"
+            >
+              <div class="my-1 fw-bold">{{ ticket.title }}</div>
+              <div class="row">
+                <div class="col-3">
+                  <p class="text-muted space-font m-0 pointer"></p>
+                </div>
+                <div class="col-9 text-end">
+                  <p class="text-muted space-font m-0">
+                    {{ ticket.assignedTo }}
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 text-start">
+                  <span>{{ ticket.priority }}</span>
+                </div>
+                <div class="col-12 text-end">
+                  <span>{{ ticket.estimatedTime | date : "shortDate" }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="Add-button d-flex align-items-center flex-column"
+            *ngIf="staus === 'To-Do'"
+          >
+            <button
+              type="button"
+              class="btn btn-secondary button"
+              data-bs-toggle="modal"
+              data-bs-target="#myModal"
+            >
+              <i class="bi bi-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add Ticket Modal -->
+  <div
+    class="modal fade"
+    id="myModal"
+    tabindex="-1"
+    aria-labelledby="myModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalLabel">New Task</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto">
+          <form (ngSubmit)="onSubmit()">
+            <!-- Task Name -->
+            <div class="mb-3">
+              <label for="task" class="form-label">Task</label>
+              <input
+                type="text"
+                id="task"
+                name="task"
+                class="form-control"
+                [(ngModel)]="taskData.task"
+              />
+            </div>
+
+            <!-- Task Description -->
+            <div class="mb-3">
+              <label for="taskDescription" class="form-label"
+                >Task Description</label
+              >
+              <textarea
+                id="taskDescription"
+                name="taskDescription"
+                class="form-control"
+                [(ngModel)]="taskData.taskDescription"
+              ></textarea>
+            </div>
+
+            <!-- Task Type -->
+            <div class="mb-3">
+              <label for="taskType" class="form-label">Task Type</label>
+              <input
+                type="text"
+                id="taskType"
+                name="taskType"
+                class="form-control"
+                [(ngModel)]="taskData.taskType"
+              />
+            </div>
+
+            <!-- Assigned To -->
+            <div class="mb-3">
+              <label for="assignedToId" class="form-label">Assigned To</label>
+              <select
+                id="assignedToId"
+                name="assignedToId"
+                class="form-select"
+                [(ngModel)]="taskData.assignedToId"
+              >
+                <option
+                  *ngFor="let developer of DevelopersList"
+                  [value]="developer.id"
+                >
+                  {{ developer.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Related Documents -->
+            <div class="mb-3">
+              <label for="relatedDocs" class="form-label"
+                >Related Documents</label
+              >
+              <input
+                type="file"
+                id="relatedDocs"
+                name="relatedDocs"
+                class="form-control"
+                (change)="onFileChange($event, 'relatedDocs')"
+              />
+            </div>
+
+            <!-- Estimated Time -->
+            <div class="mb-3">
+              <label for="estimatedTime" class="form-label"
+                >Estimated Time</label
+              >
+              <input
+                type="datetime-local"
+                id="estimatedTime"
+                name="estimatedTime"
+                class="form-control"
+                [(ngModel)]="taskData.estimatedTime"
+              />
+            </div>
+
+            <!-- Priority -->
+            <div class="mb-3">
+              <label for="priority" class="form-label">Priority</label>
+              <select
+                id="priority"
+                name="priority"
+                class="form-select"
+                [(ngModel)]="taskData.priority"
+              >
+                <option value="0">Low</option>
+                <option value="1">Medium</option>
+                <option value="2">High</option>
+              </select>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

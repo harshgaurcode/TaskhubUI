@@ -1,1 +1,65 @@
-<h1>Home Works</h1>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12">
+      <!-- User Welcome -->
+      <div class="content-wrapper p-4 border rounded">
+        <h3 class="font-weight-bold text-primary">Welcome {{ userName }}</h3>
+        <div class="text-muted">{{ date_time | date : "medium" }}</div>
+        <blockquote class="blockquote">{{ quote }}</blockquote>
+      </div>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="col-12 col-md-6 mb-4">
+      <div class="row mt-4">
+        <div class="content-wrapper p-4 border rounded">
+          <h4 class="text-primary mb-3">Your Projects</h4>
+          <div class="row">
+            <div *ngFor="let project of projectList" class="col-md-6 mb-4">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title text-primary">
+                    {{ project.projectName }}
+                  </h5>
+                  <p class="card-text flex-grow-1">
+                    {{ project.description }}
+                  </p>
+                  <a class="btn btn-primary mt-auto" href="#">View Project</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-4 col-md-6 mt-4 mb-4 news-container">
+      <div class="content-wrapper p-4 border rounded">
+        <h4 class="text-primary mb-3">Tech News And Company Events</h4>
+        <p *ngIf="newsData.length === 0">Loading news...</p>
+
+        <div
+          *ngFor="let article of newsArticles"
+          class="news-item mb-3 news-card"
+        >
+          <h5 class="text-primary">{{ article.title }}</h5>
+          <p>{{ article.description }}</p>
+          <a
+            [href]="article.link"
+            target="_blank"
+            class="btn btn-sm btn-outline-primary"
+            >Read More</a
+          >
+          <div *ngIf="article.image_url">
+            <img [src]="article.image_url" alt="{{ article.title }}" />
+          </div>
+          <p>
+            <strong>Published On:</strong>
+            {{ article.pubDate | date : "medium" }}
+          </p>
+          <p><strong>Source:</strong> {{ article.source_name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

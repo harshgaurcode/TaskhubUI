@@ -1,5 +1,6 @@
-<section class="container mt-3">
-  <form>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <!-- <section class="container mt-3"> -->
+  <form #registerForm="ngForm" (ngSubmit)="onRegister()">
     <!-- 2 column grid layout with text inputs for the first and last names -->
     <div class="row mb-4">
       <div class="col">
@@ -9,9 +10,18 @@
             id="form6Example1"
             class="form-control"
             name="username"
-            [(ngModel)]="RegisterCred.Name"
+            required
+            #nameInput="ngModel"
+            [(ngModel)]="RegisterCred.name"
           />
           <label class="form-label" for="form6Example1">Name</label>
+          <div
+            *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)"
+            class="text-danger"
+            class="text-danger"
+          >
+            <div *ngIf="nameInput.errors?.['required']">Name is required.</div>
+          </div>
         </div>
       </div>
       <div class="col">
@@ -21,9 +31,18 @@
             id="form6Example2"
             class="form-control"
             name="Email"
-            [(ngModel)]="RegisterCred.Email"
+            required
+            email
+            #emailInput="ngModel"
+            [(ngModel)]="RegisterCred.email"
           />
           <label class="form-label" for="form6Example2">Email</label>
+          <div
+            *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)"
+          >
+            <div *ngIf="nameInput.errors?.['required']">Email is required.</div>
+            <div *ngIf="nameInput.errors?.['email']"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -33,60 +52,134 @@
         <!-- Text input -->
         <div data-mdb-input-init class="form-outline mb-4">
           <input
-            type="number"
+            type="text"
             id="form6Example3"
             class="form-control"
-            [(ngModel)]="RegisterCred.PhoneNumber"
+            required
+            pattern="[0-9]{10}"
+            [(ngModel)]="RegisterCred.phoneNumber"
             name="Contact"
+            #contactInput="ngModel"
           />
           <label class="form-label" for="form6Example3">Contact Number</label>
+          <div
+            *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)"
+          >
+            <div *ngIf="contactInput.errors?.['required']">
+              Contact is required.
+            </div>
+            <div *ngIf="contactInput.errors?.['pattern']">
+              Contact should be a number
+            </div>
+          </div>
         </div>
       </div>
       <div class="col">
         <div data-mdb-input-init class="form-outline">
           <input
-            type="email"
-            id="form6Example2"
+            type="text"
+            id="form6Example6"
             class="form-control"
             name="Email"
-            [(ngModel)]="RegisterCred.Address"
+            [(ngModel)]="RegisterCred.address"
           />
           <label class="form-label" for="form6Example2">Address</label>
         </div>
       </div>
     </div>
-    <!-- Text input -->
-    <div data-mdb-input-init class="form-outline mb-4">
-      <input
-        type="number"
-        id="form6Example4"
-        class="form-control"
-        [(ngModel)]="RegisterCred.AlternateContact"
-        name="ContactNum"
-      />
-      <label class="form-label" for="form6Example4">AlternateContact</label>
+    <div class="row mb-4">
+      <div class="col">
+        <div data-mdb-input-init class="form-outline">
+          <input
+            type="text"
+            id="form6Example4"
+            class="form-control"
+            [(ngModel)]="RegisterCred.userName"
+            name="ContactNum"
+          />
+          <label class="form-label" for="form6Example8">User Name</label>
+        </div>
+      </div>
+      <div class="col">
+        <div data-mdb-input-init class="form-outline">
+          <input
+            type="password"
+            id="form6Example7"
+            class="form-control"
+            [(ngModel)]="RegisterCred.password"
+            name="ContactNum"
+            #passwordInput="ngModel"
+            minlength="6"
+          />
+          <label class="form-label" for="form6Example9">Password</label>
+          <div
+            *ngIf="
+              passwordInput.invalid && (nameInput.dirty || nameInput.touched)
+            "
+            class="text-danger"
+          >
+            <div *ngIf="passwordInput.errors?.['required']">
+              Password is required.
+            </div>
+            <div *ngIf="passwordInput.errors?.['minlenght']">
+              Password must be at least 6 characters long.
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- Email input -->
-    <div data-mdb-input-init class="form-outline mb-4">
-      <input
-        type="text"
-        id="form6Example5"
-        class="form-control"
-        name="AlternateContactof"
-        [(ngModel)]="RegisterCred.UserFamily"
-      />
-      <label class="form-label" for="form6Example5">AlternateContactof</label>
+    <div class="row mb-4">
+      <div class="col">
+        <div data-mdb-input-init class="form-outline">
+          <input
+            type="file"
+            id="profileImage"
+            class="form-control"
+            name="profileImage"
+            (change)="onFileChange($event, 'UserProfile')"
+          />
+          <label class="form-label" for="profileImage">Profile Image</label>
+        </div>
+      </div>
+      <div class="col">
+        <div data-mdb-input-init class="form-outline">
+          <input
+            type="file"
+            id="signatureImage"
+            class="form-control"
+            name="signatureImage"
+            (change)="onFileChange($event, 'Signature')"
+          />
+          <label class="form-label" for="signatureImage">Signature Image</label>
+        </div>
+      </div>
     </div>
-
-    <!-- Submit button -->
     <button
       data-mdb-ripple-init
       type="button"
-      class="btn btn-primary btn-block mb-4"
+      class="btn btn-primary btn-block mb-4 align-center"
       (click)="onRegister()"
     >
       Register
     </button>
   </form>
-</section>
+</div>
+<!-- </section> -->
+
+<!-- <div
+  id="toastId"
+  class="toast align-items-center text-white bg-primary border-0"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true"
+>
+  <div class="d-flex">
+    <div class="toast-body">Hello, world! This is a toast message.</div>
+    <button
+      type="button"
+      class="btn-close btn-close-white me-2 m-auto"
+      data-bs-dismiss="toast"
+      aria-label="Close"
+    ></button>
+  </div>
+</div> -->
