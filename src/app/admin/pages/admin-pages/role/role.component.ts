@@ -40,5 +40,14 @@ export class RoleComponent implements OnInit {
   }
   approveRequest(userID: any, roleId: any) {
     console.log(userID, roleId);
+    this.adminService.approveRequest(userID, roleId).subscribe(
+      () => {
+        console.log('Approved');
+        this.adminService.getPendingRequests();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }

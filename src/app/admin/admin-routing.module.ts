@@ -12,6 +12,10 @@ const routes: Routes = [
     component: AdminComponent,
     children: [
       {
+        path: '',
+        component: AdminLoginComponent,
+      },
+      {
         path: 'login',
         component: AdminLoginComponent,
       },

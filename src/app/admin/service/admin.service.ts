@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserLoginModel } from '../../shared/Models/userLoginModel';
 import { Observable } from 'rxjs';
@@ -32,9 +32,10 @@ export class AdminService {
   }
 
   approveRequest(userId: string, roleId: string): Observable<ApiResponse<any>> {
+    const params = new HttpParams().set('Id', userId).set('RoleId', roleId);
     return this.http.post<ApiResponse<any>>(
-      `${environment.apiBaseUrl}api/AuthenticateUserForLogin?Id=${userId}&RoleId=${roleId},`,
-      {}
+      `${environment.apiBaseUrl}/api/Admin/AuthenticateUserForLogin`,
+      { id: userId, roleId: roleId }
     );
   }
 }
