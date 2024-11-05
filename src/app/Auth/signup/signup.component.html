@@ -1,4 +1,5 @@
-<section class="container mt-3">
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <!-- <section class="container mt-3"> -->
   <form #registerForm="ngForm" (ngSubmit)="onRegister()">
     <!-- 2 column grid layout with text inputs for the first and last names -->
     <div class="row mb-4">
@@ -127,7 +128,6 @@
         </div>
       </div>
     </div>
-
     <div class="row mb-4">
       <div class="col">
         <div data-mdb-input-init class="form-outline">
@@ -157,15 +157,16 @@
     <button
       data-mdb-ripple-init
       type="button"
-      class="btn btn-primary btn-block mb-4"
+      class="btn btn-primary btn-block mb-4 align-center"
       (click)="onRegister()"
     >
       Register
     </button>
   </form>
-</section>
+</div>
+<!-- </section> -->
 
-<div
+<!-- <div
   id="toastId"
   class="toast align-items-center text-white bg-primary border-0"
   role="alert"
@@ -181,4 +182,4 @@
       aria-label="Close"
     ></button>
   </div>
-</div>
+</div> -->

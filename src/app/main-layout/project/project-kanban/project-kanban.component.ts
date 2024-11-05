@@ -5,6 +5,7 @@ import { newTicketModel } from '../../../shared/Models/TicketModels/newTicketMod
 import { ticketResponseArray } from '../../../shared/Models/TicketModels/ticketResponseArray';
 import { ToastrService } from 'ngx-toastr';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
+import { Guid } from 'guid-typescript';
 
 @Component({
   selector: 'app-project-kanban',
@@ -12,6 +13,7 @@ import { SnackbarService } from '../../../shared/services/snackbar.service';
   styleUrl: './project-kanban.component.css',
 })
 export class ProjectKanbanComponent implements OnInit {
+  loading: boolean = true;
   ticketsArrays: ticketResponseArray[] = [] as ticketResponseArray[];
   taskData: newTicketModel = new newTicketModel();
   selectedProjectData: any;
@@ -19,7 +21,7 @@ export class ProjectKanbanComponent implements OnInit {
   JsonData: any[] = JSON.parse(localStorage.getItem('projectData') || '{}');
   projectId: any = localStorage.getItem('projectId');
   DevelopersList: any[] | null = null;
-  // tickets: Ticket[] = [];
+  draggedTicket: string = '';
 
   constructor(
     private service: ProjectService,
@@ -36,28 +38,36 @@ export class ProjectKanbanComponent implements OnInit {
       (response) => (
         console.log(response),
         (this.ticketsArrays = response.result),
+        (this.loading = false),
         console.log(this.ticketsArrays)
       ),
-      (error) => console.log(error)
+      (error) => {
+        this.loading = false;
+        console.log(error);
+      }
     );
   }
-  onDragStart($event: DragEvent, _t23: ticketResponseArray) {
-    // this.draggedTicket = ticket;
-    // event.dataTransfer?.setData('text/plain', JSON.stringify(ticket));
+  onDragStart(ticket: string) {
+    this.draggedTicket = ticket;
+    console.log(this.draggedTicket);
   }
-  onDrop(event: DragEvent, arg1: string[]) {
+  onDrop(event: DragEvent, status: string) {
     event.preventDefault();
-    const ticket = JSON.parse(
-      event.dataTransfer?.getData('text/plain') || '{}'
-    );
-    this.moveTicket(ticket, status);
-    console.log('dropped');
+
+    console.log('dropped:' + this.draggedTicket);
+    this.moveTicket(this.draggedTicket, status);
   }
-  moveTicket(ticket: any, status: string) {
+  moveTicket(ticket: string, status: string) {
+    this.service.changestatus(ticket, status).subscribe(
+      (response) => {
+        console.log('moved'), this.getProjectTickets(this.projectId);
+      },
+      (error) => console.log('Not Moved')
+    );
     console.log('moved');
   }
   onDragOver(event: DragEvent) {
-    event.preventDefault(); // Allow the drop
+    event.preventDefault();
   }
 
   filterTicket(status: string) {

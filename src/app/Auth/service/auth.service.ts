@@ -31,8 +31,6 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    // Implement actual logout logic
-    // For example, clearing token or calling backend endpoint
     localStorage.removeItem('Token');
     localStorage.removeItem('User');
     return this.http.post<void>(this.apiUrl, {});

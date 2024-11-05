@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 export class SnackbarService {
   constructor(private toastr: ToastrService) {}
 
-  showsuccess(message: string, title: string) {
+  showsuccess(message: string, title?: string) {
     this.toastr.success(message, title, { closeButton: true, timeOut: 1000 });
   }
 

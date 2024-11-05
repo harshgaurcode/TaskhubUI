@@ -4,7 +4,7 @@ import { HomeComponent } from './home/home.component';
 
 import { ProfileComponent } from './profile/profile.component';
 import { NotificationComponent } from './notification/notification.component';
-import { MainLayoutComponent } from './Root-Page/main-layout.component';
+import { MainLayoutComponent } from './root/main-layout.component';
 
 const routes: Routes = [
   {

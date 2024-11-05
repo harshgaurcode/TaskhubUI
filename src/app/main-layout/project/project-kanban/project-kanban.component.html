@@ -1,80 +1,82 @@
 <div class="container-fluid pt-2">
-  <div class="row pt-5">
-    <div class="col-12">
-      <div class="d-flex justify-content-between">
-        <div>
-          <h4>Project Name : {{ selectedProjectData.projectName }}</h4>
-        </div>
-      </div>
+  <div
+    *ngIf="loading"
+    class="d-flex justify-content-center align-items-center"
+    style="height: 200px"
+  >
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
   </div>
-  <div class="row mt-3">
-    <div class="col-12">
-      <div class="d-flex">
-        <div>
-          <input
-            type="text"
-            placeholder="Search Here"
-            class="form-control ng-pristine ng-valid ng-touched"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row pt-1">
-    <div
-      class="col"
-      id="3"
-      *ngFor="let staus of status"
-      (dragover)="onDragOver($event)"
-      (drop)="onDrop($event, status)"
-    >
-      <div class="card card-bg">
-        <div class="card-header border-0 py-1">
-          {{ staus }} <span> </span
-          ><!---->
-        </div>
-        <div class="card-body ticket-bg border" id="3">
-          <!---->
-          <div
-            draggable="true"
-            *ngFor="let ticket of filterTicket(staus)"
-            class="card-Body-Hover m-1 rounded-1 task"
-            (dragstart)="onDragStart($event, ticket)"
-          >
-            <div class="my-1 fw-bold">{{ ticket.title }}</div>
-            <div class="row">
-              <div class="col-3">
-                <p class="text-muted space-font m-0 pointer"></p>
-              </div>
-              <div class="col-9 text-end">
-                <p class="text-muted space-font m-0">
-                  {{ ticket.assignedTo }}
-                </p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12 text-end"><span>5 hrs</span></div>
-            </div>
+  <div *ngIf="!loading">
+    <div class="row pt-5">
+      <div class="col-12">
+        <div class="d-flex justify-content-between">
+          <div>
+            <h4>Project Name : {{ selectedProjectData.projectName }}</h4>
           </div>
         </div>
-        <div
-          class="Add-button d-flex align-items-center flex-column"
-          *ngIf="staus === 'To-Do'"
-        >
-          <button
-            type="button"
-            class="btn btn-secondary button"
-            data-bs-toggle="modal"
-            data-bs-target="#myModal"
+      </div>
+    </div>
+    <div class="row pt-1">
+      <div
+        class="col"
+        id="3"
+        *ngFor="let staus of status"
+        (dragover)="onDragOver($event)"
+        (drop)="onDrop($event, staus)"
+      >
+        <div class="card card-bg">
+          <div class="card-header border-0 py-1">
+            {{ staus }} <span> </span
+            ><!---->
+          </div>
+          <div class="card-body ticket-bg border" id="3">
+            <!---->
+            <div
+              draggable="true"
+              *ngFor="let ticket of filterTicket(staus)"
+              class="card-Body-Hover m-1 rounded-1 task"
+              (dragstart)="onDragStart(ticket.taskId)"
+            >
+              <div class="my-1 fw-bold">{{ ticket.title }}</div>
+              <div class="row">
+                <div class="col-3">
+                  <p class="text-muted space-font m-0 pointer"></p>
+                </div>
+                <div class="col-9 text-end">
+                  <p class="text-muted space-font m-0">
+                    {{ ticket.assignedTo }}
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 text-start">
+                  <span>{{ ticket.priority }}</span>
+                </div>
+                <div class="col-12 text-end">
+                  <span>{{ ticket.estimatedTime | date : "shortDate" }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="Add-button d-flex align-items-center flex-column"
+            *ngIf="staus === 'To-Do'"
           >
-            <i class="bi bi-plus"></i>
-          </button>
+            <button
+              type="button"
+              class="btn btn-secondary button"
+              data-bs-toggle="modal"
+              data-bs-target="#myModal"
+            >
+              <i class="bi bi-plus"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
   <!-- Add Ticket Modal -->
   <div
     class="modal fade"

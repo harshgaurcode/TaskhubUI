@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { ProjectComponent } from './project-root-component/project.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
+import { ModalComponent } from '../../shared/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { FormsModule } from '@angular/forms';
     RouterModule,
     HttpClientModule,
     FormsModule,
+    SharedModule,
   ],
   providers: [],
 })

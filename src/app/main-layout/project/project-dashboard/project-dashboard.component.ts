@@ -1,22 +1,26 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProjectService } from '../service/project.service';
 import { ProjectListResponse } from '../../../shared/Models/ProjectModel/ProjectListResponse';
 import { Guid } from 'guid-typescript';
 import { Router } from '@angular/router';
 import { SharedService } from '../../../shared/services/shared.service';
 import { addNewProject } from '../../../shared/Models/ProjectModel/addNewProject';
-
+import { ModalService } from '../../../shared/services/modal.service';
+import { jwtDecode } from 'jwt-decode';
 @Component({
   selector: 'app-project-dashboard',
   templateUrl: './project-dashboard.component.html',
   styleUrl: './project-dashboard.component.css',
 })
 export class ProjectDashboardComponent implements OnInit {
+  isProject: any;
+  isEdit: any;
   constructor(
     private _service: ProjectService,
     private router: Router,
-    private sharedMethods: SharedService
+    private sharedMethods: SharedService,
+    private modalService: ModalService
   ) {}
 
   selectedProject: any = null;
@@ -27,6 +31,8 @@ export class ProjectDashboardComponent implements OnInit {
   userList: any[] = [];
   projectimageurl: string = '';
   projectdocsurl: string = '';
+  isManager: boolean = false;
+  isOpen = false;
 
   projectData: addNewProject = new addNewProject();
   projectId: any = '';
@@ -37,6 +43,44 @@ export class ProjectDashboardComponent implements OnInit {
     this.getdevelopersList();
     this.getmanagerList();
     localStorage.removeItem('projectId');
+    this.getRole();
+  }
+
+  //get Role
+  token: any = localStorage.getItem('Token');
+  decodedToken: any;
+  role: string = '';
+
+  getRole() {
+    if (this.token) {
+      this.decodedToken = jwtDecode(this.token);
+      this.role = this.decodedToken.Role;
+      console.log(this.role);
+      if (this.role == 'Manager') {
+        this.isManager = true;
+      }
+    } else {
+      console.error('No token found');
+    }
+  }
+
+  //Modal Toggel Methods
+  openprojectModal() {
+    this.isProject = true;
+    this.modalService.openModal();
+  }
+  closeprojectModal() {
+    this.isProject = false;
+    this.modalService.closeModal();
+  }
+
+  openModal() {
+    this.isEdit = true;
+    this.modalService.openModal();
+  }
+  closeModal() {
+    this.isEdit = false;
+    this.modalService.closeModal();
   }
   getmanagerList() {
     this._service.getmanagerList().subscribe(

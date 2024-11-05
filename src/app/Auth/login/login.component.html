@@ -1,8 +1,4 @@
-<!-- <app-popups
-  [message]="'Registration Successful!'"
-  [isShow]="popupDisplay"
-  [isButtonShow]="false"
-></app-popups> -->
+<app-spinner></app-spinner>
 <div class="container d-flex justify-content-center align-items-center vh-100">
   <div class="row">
     <div class="col-12 col-md-12">
@@ -32,9 +28,9 @@
         </div>
 
         <!-- 2 column grid layout for inline styling -->
-        <div class="row mb-4">
+        <!-- <div class="row mb-4">
           <div class="col d-flex justify-content-center">
-            <!-- Checkbox -->
+           
             <div class="form-check">
               <input
                 class="form-check-input"
@@ -46,18 +42,19 @@
                 Remember me
               </label>
             </div>
-          </div>
+          </div> -->
 
-          <div class="col">
-            <!-- Simple link -->
+        <!-- <div class="col">
+           
             <a routerLink="../forgotpassword">Forgot password?</a>
           </div>
-        </div>
+        </div> -->
 
         <!-- Submit button -->
         <button
           type="button"
           class="btn btn-primary btn-block mb-4"
+          [disabled]="isSubmitting"
           (click)="onLogin()"
         >
           Sign in

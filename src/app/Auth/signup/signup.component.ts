@@ -4,6 +4,7 @@ import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Toast } from 'bootstrap';
+import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-signup',
@@ -11,7 +12,11 @@ import { Toast } from 'bootstrap';
   styleUrl: './signup.component.css',
 })
 export class SignupComponent {
-  constructor(private authServices: AuthService, private router: Router) {}
+  constructor(
+    private authServices: AuthService,
+    private router: Router,
+    private snackbarService: SnackbarService
+  ) {}
   RegisterCred: UserRegisterModel = new UserRegisterModel();
   isSuccess: boolean = false;
 
@@ -44,21 +49,18 @@ export class SignupComponent {
     console.log(this.RegisterCred);
     this.authServices.Register(formData).subscribe(
       (response) => {
+        this.snackbarService.showinfo(
+          'We have sent An verification link to Your Registered Email Address ',
+          'Info'
+        );
         setTimeout(() => {
           this.router.navigateByUrl('');
         }, 5000);
       },
       (error) => {
+        this.snackbarService.showerror('Something went wrong.', 'Error');
         console.log('Registration failed', error);
       }
     );
-
-    const toastElement = document.getElementById('toastId');
-    if (toastElement) {
-      const toast = new Toast(toastElement); // Create Bootstrap Toast instance
-      toast.show(); // Show the toast
-    } else {
-      console.error('Toast element not found!');
-    }
   }
 }

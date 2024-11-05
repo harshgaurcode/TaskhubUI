@@ -4,7 +4,7 @@ import { single } from 'rxjs';
 import { SignupComponent } from './signup/signup.component';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { LoginComponent } from './login/login.component';
-import { AuthComponent } from './Root/auth.component';
+import { AuthComponent } from './root/auth.component';
 
 const routes: Routes = [
   {

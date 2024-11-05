@@ -81,6 +81,16 @@ export class ProjectService {
     );
   }
 
+  changestatus(ticket: string, status: string): Observable<ApiResponse<any>> {
+    const body = {
+      taskId: ticket,
+      status: status,
+    };
+    return this.http.patch<ApiResponse<any>>(
+      `${environment.apiBaseUrl}/api/Project/UpdateStatus`,
+      body
+    );
+  }
   private getToken(): string {
     return localStorage.getItem('Token') || '';
   }
