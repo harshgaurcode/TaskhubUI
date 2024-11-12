@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
           console.log('Login Successfull', response.result);
           localStorage.setItem('Token', response.result.token);
           localStorage.setItem('User', response.result.user.userName);
+          localStorage.setItem('TeamId', response.result.user.teamId);
           setTimeout(() => {
             this.router.navigateByUrl('main');
           }, 3000);

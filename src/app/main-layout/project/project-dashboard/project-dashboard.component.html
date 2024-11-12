@@ -1,335 +1,338 @@
 <div class="container-fluid">
   <div class="row">
-    <div *ngFor="let project of projectList" class="col-md-4 mb-4">
-      <div class="card h-100 shadow-sm">
-        <div
-          class="card-body d-flex flex-column active"
-          (click)="GetProjectDisciptions(project.projectId)"
-        >
-          <h5 class="card-title">{{ project.projectName }}</h5>
-          <p class="card-text flex-grow-1">{{ project.description }}</p>
-          <a
-            class="btn btn-primary mt-2"
-            (click)="GetProjectTickets(project.projectId)"
-            >View Tickets</a
-          >
-          <!-- hide if role is other than manager -->
-          <a class="btn btn-primary mt-2" (click)="openModal()"
-            >Edit Project Details</a
-          >
-        </div>
-      </div>
-    </div>
-    <!-- Add New Project Card (Smaller Size) -->
-    <!-- hide if role is other than manager -->
-    <div class="col-md-4 mb-4">
-      <button class="btn btn-primary mt-auto" (click)="openprojectModal()">
-        Add New Project
-      </button>
-    </div>
-  </div>
-  <div class="row mt-auto">
-    <div class="row mt-4">
-      <img
-        src="projectdocsurl"
-        alt="Project Image"
-        *ngIf="projectDetails?.projectImage"
-      />
-    </div>
-    <div *ngIf="projectDetails?.projectName" class="col-md-6">
-      <h3>{{ projectDetails?.projectName }}</h3>
-      <p>Description: {{ projectDetails?.description }}</p>
-      <p>Project Status: {{ projectDetails?.projectStatus }}</p>
-      <p>
-        Project Starting Date:
-        {{ projectDetails?.createdTimeStamp | date }}
-      </p>
-    </div>
-  </div>
-
-  <!-- Add Project Modal -->
-  <app-modal *ngIf="isProject" [title]="'Add New Project'">
-    <form (ngSubmit)="onSubmit()">
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="projectName" class="form-label">Project Name</label>
-            <input
-              type="text"
-              id="projectName"
-              name="projectName"
-              class="form-control"
-              [(ngModel)]="projectData.projectName"
-            />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              class="form-control"
-              [(ngModel)]="projectData.description"
-            ></textarea>
-          </div>
-        </div>
-      </div>
+    <div class="col">
       <div class="row">
-        <div class="col">
-          <label for="projectImage" class="form-label">Project Image</label>
-          <input
-            type="file"
-            id="projectImage"
-            name="projectImage"
-            class="form-control"
-            (change)="onFileChange($event, 'projectimage')"
-          />
-        </div>
-        <div class="col">
-          <label for="projectDocs" class="form-label">Project Documents</label>
-          <input
-            type="file"
-            id="projectDocs"
-            name="projectDocs"
-            class="form-control"
-            (change)="onFileChange($event, 'projectdoc')"
-          />
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="projectStatus" class="form-label">Project Status</label>
-            <input
-              type="text"
-              id="projectStatus"
-              name="projectStatus"
-              class="form-control"
-              [(ngModel)]="projectData.projectStatus"
-            />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="clientName" class="form-label">Client Name</label>
-            <input
-              type="text"
-              id="clientName"
-              name="clientName"
-              class="form-control"
-              [(ngModel)]="projectData.clientName"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="managedBy" class="form-label">Managed By</label>
-            <select
-              id="managedBy"
-              name="managedBy"
-              class="form-select"
-              [(ngModel)]="projectData.managedBy"
+        <div *ngFor="let project of projectList" class="col-md-4 mb-4">
+          <div class="card h-100 shadow-sm">
+            <div
+              class="card-body d-flex flex-column active"
+              (click)="GetProjectDisciptions(project.projectId)"
             >
-              <!-- Populate with user options -->
-              <option [value]="" disabled selected>Select Manager</option>
-              <!-- Example options, replace with actual values -->
-              <option *ngFor="let manager of ManagersList" [value]="manager.id">
-                {{ manager.name }}
-              </option>
-            </select>
+              <h5 class="card-title">{{ project.projectName }}</h5>
+              <p class="card-text flex-grow-1">{{ project.description }}</p>
+              <a
+                class="btn btn-primary mt-2"
+                (click)="GetProjectTickets(project.projectId)"
+                >View Tickets</a
+              >
+              <!-- hide if role is other than manager -->
+              <a class="btn btn-primary mt-2" (click)="openModal()"
+                >Edit Project Details</a
+              >
+              <a
+                class="btn btn-primary mt-2"
+                (click)="deleteProject(project.projectId)"
+                >Delete Project</a
+              >
+            </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="qaId" class="form-label">QA</label>
-            <select id="qaId" name="qaId" class="form-select">
-              <!-- Populate with QA options -->
-              <option value="" disabled selected>Select QA</option>
-              <!-- Example options, replace with actual values -->
-              <option value="guid1">QA 1</option>
-              <option value="guid2">QA 2</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="developerIds" class="form-label">Developers</label>
-        <select
-          class="selectpicker"
-          aria-label="Default select example"
-          id="developerIds"
-          name="developerIds"
-          [(ngModel)]="projectData.developerIds"
-        >
-          <!-- Populate with developer options -->
-          <option
-            *ngFor="let developer of DevelopersList"
-            [value]="developer.id"
-          >
-            {{ developer.name }}
-          </option>
-        </select>
-      </div>
-      <div class="d-flex justify-content-center">
-        <div class="m-1">
-          <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-        <div class="m-1">
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="closeprojectModal()"
-          >
-            Close
+        <!-- hide if role is other than manager -->
+        <div class="col-md-4 mb-4 align-self-center">
+          <!-- <i class="bi bi-plus"></i> -->
+          <button class="btn btn-primary mt-auto" (click)="openprojectModal()">
+            Add New Project
           </button>
         </div>
       </div>
-    </form>
-  </app-modal>
 
-  <!-- Edit Project Details Modal-->
-  <app-modal *ngIf="isEdit" [title]="'Edit Project'">
-    <form (ngSubmit)="onSubmit()">
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="projectName" class="form-label">Project Name</label>
-            <input
-              type="text"
-              id="projectName"
-              name="projectName"
-              class="form-control"
-              [(ngModel)]="projectData.projectName"
-            />
+      <!-- Add Project Modal -->
+      <app-modal *ngIf="isProject" [title]="'Add New Project'">
+        <form (ngSubmit)="onSubmit()" #projectForm="ngForm">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="projectName" class="form-label">Project Name</label>
+                <input
+                  type="text"
+                  id="projectName"
+                  name="projectName"
+                  class="form-control"
+                  required
+                  #projectName="ngModel"
+                  [(ngModel)]="projectData.projectName"
+                />
+                <div
+                  *ngIf="projectName.invalid && projectName.touched"
+                  class="text-danger"
+                >
+                  Project name is required.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  class="form-control"
+                  required
+                  #description="ngModel"
+                  [(ngModel)]="projectData.description"
+                ></textarea>
+                <div
+                  *ngIf="description.invalid && description.touched"
+                  class="text-danger"
+                >
+                  Description is required.
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              class="form-control"
-              [(ngModel)]="projectData.description"
-            ></textarea>
+          <div class="row">
+            <div class="col">
+              <label for="projectImage" class="form-label">Project Image</label>
+              <input
+                type="file"
+                id="projectImage"
+                name="projectImage"
+                class="form-control"
+                (change)="onFileChange($event, 'projectimage')"
+              />
+            </div>
+            <div class="col">
+              <label for="projectDocs" class="form-label"
+                >Project Documents</label
+              >
+              <input
+                type="file"
+                id="projectDocs"
+                name="projectDocs"
+                class="form-control"
+                (change)="onFileChange($event, 'projectdoc')"
+              />
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="projectImage" class="form-label">Project Image</label>
-            <input
-              type="file"
-              id="projectImage"
-              name="projectImage"
-              class="form-control"
-            />
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="projectStatus" class="form-label"
+                  >Project Status</label
+                >
+                <input
+                  type="text"
+                  id="projectStatus"
+                  name="projectStatus"
+                  class="form-control"
+                  required
+                  #projectStatus="ngModel"
+                  [(ngModel)]="projectData.projectStatus"
+                />
+                <div
+                  *ngIf="projectStatus.invalid && projectStatus.touched"
+                  class="text-danger"
+                >
+                  Project status is required.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="clientName" class="form-label">Client Name</label>
+                <input
+                  type="text"
+                  id="clientName"
+                  name="clientName"
+                  class="form-control"
+                  [(ngModel)]="projectData.clientName"
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="projectDocs" class="form-label"
-              >Project Documents</label
-            >
-            <input
-              type="file"
-              id="projectDocs"
-              name="projectDocs"
-              class="form-control"
-            />
+
+          <div class="d-flex justify-content-center">
+            <div class="m-1">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="!projectForm.valid"
+              >
+                Save
+              </button>
+            </div>
+            <div class="m-1">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="closeprojectModal()"
+              >
+                Close
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="projectStatus" class="form-label">Project Status</label>
-            <input
-              type="text"
-              id="projectStatus"
-              name="projectStatus"
-              class="form-control"
-            />
+        </form>
+      </app-modal>
+
+      <!-- Edit Project Details Modal-->
+      <app-modal *ngIf="isEdit" [title]="'Edit Project'">
+        <form (ngSubmit)="onSubmit()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="projectName" class="form-label">Project Name</label>
+                <input
+                  type="text"
+                  id="projectName"
+                  name="projectName"
+                  class="form-control"
+                  #projectName="ngModel"
+                  required
+                  [(ngModel)]="projectData.projectName"
+                />
+                <div *ngIf="projectName.invalid && projectName.touched">
+                  Project name is required.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  class="form-control"
+                  [(ngModel)]="projectData.description"
+                  #description="ngModel"
+                  required
+                ></textarea>
+                <div *ngIf="description.touched && description.invalid">
+                  Description is Required
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="clientName" class="form-label">Client Name</label>
-            <input
-              type="text"
-              id="clientName"
-              name="clientName"
-              class="form-control"
-              [(ngModel)]="projectData.clientName"
-            />
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="projectImage" class="form-label"
+                  >Project Image</label
+                >
+                <input
+                  type="file"
+                  id="projectImage"
+                  name="projectImage"
+                  class="form-control"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="projectDocs" class="form-label"
+                  >Project Documents</label
+                >
+                <input
+                  type="file"
+                  id="projectDocs"
+                  name="projectDocs"
+                  class="form-control"
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col-md-6">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="projectStatus" class="form-label"
+                  >Project Status</label
+                >
+                <input
+                  type="text"
+                  id="projectStatus"
+                  name="projectStatus"
+                  class="form-control"
+                  required
+                  #projectStatus="ngModel"
+                  [(ngModel)]="projectData.projectStatus"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="clientName" class="form-label">Client Name</label>
+                <input
+                  type="text"
+                  id="clientName"
+                  name="clientName"
+                  class="form-control"
+                  [(ngModel)]="projectData.clientName"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="managedBy" class="form-label">Managed By</label>
+                <select
+                  id="managedBy"
+                  name="managedBy"
+                  class="form-select"
+                  [(ngModel)]="projectData.managedBy"
+                >
+                  <option value="" disabled selected>Select Manager</option>
+                  <option
+                    *ngFor="let manager of ManagersList"
+                    value="manager.id"
+                  >
+                    {{ manager.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6"></div>
+          </div>
           <div class="mb-3">
-            <label for="managedBy" class="form-label">Managed By</label>
+            <label for="developerIds" class="form-label">Developers</label>
             <select
-              id="managedBy"
-              name="managedBy"
+              multiple
+              data-mdb-clear-button
+              id="developerIds"
+              name="developerIds"
               class="form-select"
-              [(ngModel)]="projectData.managedBy"
+              [(ngModel)]="projectData.developerIds"
             >
-              <!-- Populate with user options -->
-              <option value="" disabled selected>Select Manager</option>
-              <!-- Example options, replace with actual values -->
-              <option *ngFor="let manager of ManagersList" value="manager.id">
-                {{ manager.name }}
+              <!-- Populate with developer options -->
+              <option
+                *ngFor="let developer of DevelopersList"
+                [value]="developer.id"
+              >
+                {{ developer.name }}
               </option>
             </select>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="qaId" class="form-label">QA</label>
-            <select id="qaId" name="qaId" class="form-select">
-              <!-- Populate with QA options -->
-              <option value="" disabled selected>Select QA</option>
-              <!-- Example options, replace with actual values -->
-              <option value="guid1">QA 1</option>
-              <option value="guid2">QA 2</option>
-            </select>
+          <div class="d-flex justify-content-center">
+            <div class="m-1">
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            <div class="m-1">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="closeModal()"
+              >
+                Close
+              </button>
+            </div>
           </div>
-        </div>
+        </form>
+      </app-modal>
+    </div>
+
+    <div class="col-4">
+      <h2>Please Select Any Project for more informations</h2>
+      <div *ngIf="projectDetails?.projectImage" class="row mt-4">
+        <img [src]="projectimageurl" alt="Project Image" />
       </div>
-      <div class="mb-3">
-        <label for="developerIds" class="form-label">Developers</label>
-        <select
-          multiple
-          data-mdb-clear-button
-          id="developerIds"
-          name="developerIds"
-          class="form-select"
-          [(ngModel)]="projectData.developerIds"
-        >
-          <!-- Populate with developer options -->
-          <option
-            *ngFor="let developer of DevelopersList"
-            [value]="developer.id"
-          >
-            {{ developer.name }}
-          </option>
-        </select>
+      <div *ngIf="projectDetails?.projectName" class="col-md-6">
+        <h3>{{ projectDetails?.projectName }}</h3>
+        <p>Description: {{ projectDetails?.description }}</p>
+        <p>Project Status: {{ projectDetails?.projectStatus }}</p>
+        <p>
+          Project Starting Date:
+          {{ projectDetails?.createdTimeStamp | date }}
+        </p>
       </div>
-      <div class="d-flex justify-content-center">
-        <div class="m-1">
-          <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-        <div class="m-1">
-          <button type="button" class="btn btn-primary" (click)="closeModal()">
-            Close
-          </button>
-        </div>
-      </div>
-    </form>
-  </app-modal>
+    </div>
+  </div>
 </div>

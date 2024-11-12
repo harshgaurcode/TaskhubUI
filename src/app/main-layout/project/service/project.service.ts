@@ -19,14 +19,17 @@ export class ProjectService {
       { params }
     );
   }
-  projectList(): Observable<ApiResponse<ProjectListResponse>> {
+  projectList(teamId: string): Observable<ApiResponse<ProjectListResponse>> {
     const headers = new HttpHeaders().set(
       'Authorization',
       `Bearer ${this.getToken()}`
     );
+    const params = new HttpParams().append('teamId', teamId);
+    console.log('TeamId', teamId);
+
     return this.http.get<ApiResponse<ProjectListResponse>>(
       `${environment.apiBaseUrl}/api/Project/GetProjects`,
-      { headers }
+      { headers, params }
     );
   }
   AddProject(projectData: any): Observable<ApiResponse<any>> {
@@ -44,18 +47,6 @@ export class ProjectService {
 
   getquote(): Observable<any> {
     return this.http.get<any>('https://zenquotes.io/api/image');
-  }
-
-  getdevelopersList(): Observable<any> {
-    return this.http.get<any>(
-      `${environment.apiBaseUrl}/api/Admin/GetAllDeveloper`
-    );
-  }
-
-  getmanagerList(): Observable<any> {
-    return this.http.get<any>(
-      `${environment.apiBaseUrl}/api/Admin/GetAllManagers`
-    );
   }
 
   getticketsbyprojectid(
@@ -93,5 +84,16 @@ export class ProjectService {
   }
   private getToken(): string {
     return localStorage.getItem('Token') || '';
+  }
+
+  deleteProject(projectId: string): Observable<ApiResponse<any>> {
+    const params = new HttpParams().append('projectId', projectId);
+    return this.http.post<ApiResponse<any>>(
+      `${environment.apiBaseUrl}/api/Project/DeleteProject`,
+      {},
+      {
+        params,
+      }
+    );
   }
 }

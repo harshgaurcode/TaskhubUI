@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, viewChild } from '@angular/core';
 import { ProjectService } from '../service/project.service';
 import { newTicketModel } from '../../../shared/Models/TicketModels/newTicketModel';
 import { ticketResponseArray } from '../../../shared/Models/TicketModels/ticketResponseArray';
-import { ToastrService } from 'ngx-toastr';
+
 import { SnackbarService } from '../../../shared/services/snackbar.service';
-import { Guid } from 'guid-typescript';
+
+import { ModalService } from '../../../shared/services/modal.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-project-kanban',
@@ -22,10 +24,13 @@ export class ProjectKanbanComponent implements OnInit {
   projectId: any = localStorage.getItem('projectId');
   DevelopersList: any[] | null = null;
   draggedTicket: string = '';
-
+  noData: boolean = false;
+  ticketModal = false;
+  @ViewChild('ticketForm') ticketForm: NgForm | undefined;
   constructor(
     private service: ProjectService,
-    private toastservice: SnackbarService
+    private toastservice: SnackbarService,
+    private modalService: ModalService
   ) {}
   ngOnInit(): void {
     this.selectedProjectData = this.JsonData;
@@ -33,16 +38,33 @@ export class ProjectKanbanComponent implements OnInit {
     this.DevelopersList = JSON.parse(localStorage.getItem('Dev') || '[]');
   }
 
+  openTicketModal() {
+    this.ticketForm?.reset();
+    this.ticketModal = true;
+    this.modalService.openModal();
+  }
+  closeTicketModal() {
+    this.ticketForm?.reset();
+    this.ticketModal = false;
+  }
   getProjectTickets(id: any) {
     this.service.getticketsbyprojectid(id).subscribe(
-      (response) => (
-        console.log(response),
-        (this.ticketsArrays = response.result),
-        (this.loading = false),
-        console.log(this.ticketsArrays)
-      ),
-      (error) => {
+      (response) => {
+        console.log(response);
+        this.ticketsArrays = response.result;
+        console.log(this.ticketsArrays);
         this.loading = false;
+        console.log(this.ticketsArrays);
+        if (this.ticketsArrays.length == 0) {
+          this.toastservice.showinfo('No Data Found', 'No Data');
+          this.noData = true;
+        }
+      },
+      (error) => {
+        this.toastservice.showerror(
+          'Something went wrong please try again',
+          'Error'
+        );
         console.log(error);
       }
     );

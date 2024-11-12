@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
+import { ApiResponse } from '../../shared/Models/ApiResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -28,5 +29,13 @@ export class LayoutService {
   getNewsData(): Observable<any> {
     const url = `${this.apiUrl}?apikey=${this.apiKey}&language=en&category=science,technology`;
     return this.http.get<any>(url);
+  }
+
+  getTeamMembersData(teamId: string): Observable<ApiResponse<any>> {
+    const params = new HttpParams().set('TeamId', teamId);
+    return this.http.get<ApiResponse<any>>(
+      `${environment.apiBaseUrl}/api/Admin/GetTeamById`,
+      { params }
+    );
   }
 }

@@ -8,6 +8,7 @@ import { SharedService } from '../../shared/services/shared.service';
 import { SpinnerService } from '../../shared/services/spinner.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { ModalService } from '../../shared/services/modal.service';
+import { GetProfileModel } from '../../shared/Models/UserModel/getProfileModel';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -26,6 +27,21 @@ export class ProfileComponent implements OnInit {
     userName: '',
     email: '',
     userRole: null,
+    signature: {} as File,
+    profile: {} as File,
+    address: '',
+    userContact: '',
+    Password: '',
+    PhoneNumber: '',
+    Name: '',
+    AlternateContact: '',
+    UserId: '',
+  };
+
+  getProfiledata: GetProfileModel = {
+    userName: '',
+    email: '',
+    role: null,
     signature: '',
     profile: '',
     address: '',
@@ -67,15 +83,16 @@ export class ProfileComponent implements OnInit {
     this.spinnerService.show();
     this._service.getUserProfile(userId).subscribe(
       (profile) => {
-        this.profileData = profile;
+        this.getProfiledata = profile;
+        console.log(this.getProfiledata);
         this.dataLoaded = true;
         this.spinnerService.hide();
         if (this.profileData) {
           this.userProfileImageUrl = this.sharedMethods.getFullImageUrl(
-            this.profileData.profile
+            this.getProfiledata.profile
           );
           this.userSignatureImageUrl = this.sharedMethods.getFullImageUrl(
-            this.profileData.signature
+            this.getProfiledata.signature
           );
         } else {
           console.error('Profile data is null');
@@ -86,6 +103,16 @@ export class ProfileComponent implements OnInit {
         this.spinnerService.hide();
       }
     );
+  }
+  onFileChange(event: any, field: string) {
+    const file = event.target.files[0];
+    if (file) {
+      if (field === 'userProfile') {
+        this.profileData.profile = file; // Assign the actual file
+      } else if (field === 'signature') {
+        this.profileData.signature = file; // Assign the actual file
+      }
+    }
   }
 
   updateUserProfile() {
@@ -99,6 +126,9 @@ export class ProfileComponent implements OnInit {
     formData.append('Signature', this.profileData.signature);
     formData.append('Password', this.profileData.Password);
     formData.append('Email', this.profileData.email);
+    formData.append('UserProfile', this.profileData.profile);
+    formData.append('Signature', this.profileData.signature);
+
     this.spinnerService.show();
     this._service.updateUserProfile(formData).subscribe(
       (response) => {

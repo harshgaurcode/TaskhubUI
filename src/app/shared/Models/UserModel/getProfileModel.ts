@@ -1,6 +1,4 @@
-import { Guid } from 'guid-typescript';
-
-export interface profileModel {
+export interface GetProfileModel {
   Password: string;
   PhoneNumber: string;
   Name: string;
@@ -8,9 +6,9 @@ export interface profileModel {
   UserId: string;
   userName: string;
   email: string;
-  userRole: string | null;
-  signature: File;
-  profile: File;
+  role: string | null;
+  signature: string;
+  profile: string;
   address: string;
   userContact: string;
 }

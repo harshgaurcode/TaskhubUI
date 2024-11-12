@@ -11,7 +11,8 @@ export class SharedService {
 
   //Show Image
   getFullImageUrl(imagePath: string): string {
-    return `${this.baseUrl}${imagePath}`;
+    const removeWWWroot = imagePath.replace('/wwwroot', '');
+    return `${this.baseUrl}${removeWWWroot}`;
   }
 
   showToast(message: string, type: 'success' | 'error' = 'error'): void {
