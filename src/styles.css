@@ -10,9 +10,9 @@
   background-color: #fff;
   min-height: 100vh;
 }
-.btn-color {
-  background-color: #e9edf6;
-  color: #fff;
-}
+/* button {
+  background-color: #e9edf6 !important;
+  color: #111010 !important;
+} */
 
 /*  #CADCFC */

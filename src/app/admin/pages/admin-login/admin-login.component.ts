@@ -28,12 +28,13 @@ export class AdminLoginComponent {
 
   onLogin() {
     this.spinnerService.show();
-    this.authservice.Login(this.LoginCred).subscribe(
-      (response: ApiResponse<AuthResult>) => {
+    this.authservice
+      .Login(this.LoginCred)
+      .subscribe((response: ApiResponse<AuthResult>) => {
         this.isSubmitting = true;
         if (response.statusCode === 200) {
           this.isSubmitting = false;
-          this.spinnerService.hide(); // Hide spinner
+          this.spinnerService.hide();
           this.snackbarService.showsuccess('Login was successful!', 'Success');
           console.log('Login Successfull', response.result);
           localStorage.setItem('Token', response.result.token);
@@ -41,19 +42,7 @@ export class AdminLoginComponent {
           setTimeout(() => {
             this.router.navigateByUrl('admin/dash');
           }, 3000);
-        } else {
-          this.isSubmitting = false;
-          this.spinnerService.hide(); // Hide spinner
-          this.snackbarService.showerror('Something went wrong.', 'Error');
-          console.log('Login Failed');
         }
-      },
-      (error) => {
-        this.isSubmitting = false;
-        this.spinnerService.hide();
-        this.snackbarService.showerror('Something went wrong.', 'Error');
-        console.log('An Error occurred', error);
-      }
-    );
+      });
   }
 }

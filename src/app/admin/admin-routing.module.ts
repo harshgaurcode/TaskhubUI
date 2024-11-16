@@ -5,12 +5,17 @@ import { AdminPagesComponent } from './pages/admin-pages/admin-pages.component';
 import { AdminComponent } from './admin.component';
 import { RoleComponent } from './pages/admin-pages/role/role.component';
 import { UsersComponent } from './pages/admin-pages/users/users.component';
+import { TeamComponent } from './pages/admin-pages/team/team.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
     children: [
+      {
+        path: '',
+        component: AdminLoginComponent,
+      },
       {
         path: 'login',
         component: AdminLoginComponent,
@@ -26,6 +31,10 @@ const routes: Routes = [
           {
             path: 'users',
             component: UsersComponent,
+          },
+          {
+            path: 'team',
+            component: TeamComponent,
           },
           {
             path: '',

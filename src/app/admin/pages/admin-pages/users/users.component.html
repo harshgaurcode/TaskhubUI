@@ -1,1 +1,56 @@
-<p>users works!</p>
+<div class="container">
+  <h3>User List</h3>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Phone Number</th>
+        <th>Status</th>
+        <th>Authenticated</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of usersData">
+        <td>{{ user.name }}</td>
+        <td>{{ user.userName }}</td>
+        <td>{{ user.role.roleName }}</td>
+        <td>{{ user.phoneNumber }}</td>
+        <td>{{ user.isActive ? "Active" : "Inactive" }}</td>
+        <td>{{ user.isAuthenticated ? "Yes" : "No" }}</td>
+        <td>
+          <button
+            class="btn btn-danger"
+            (click)="openConfirmationModal(user.id)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <app-modal [title]="'Please Confirm the Action'">
+    <div class="d-flex justify-content-center">
+      <div class="m-1">
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          (click)="deleteUser()"
+        >
+          Delete
+        </button>
+      </div>
+      <div class="m-1">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="closeConfirmationModal()"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </app-modal>
+</div>

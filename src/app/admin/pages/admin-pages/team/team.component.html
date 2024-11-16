@@ -1,0 +1,174 @@
+<div class="row">
+  <div class="col-4">
+    <h2>Team List</h2>
+    <ul class="list-group">
+      <li *ngFor="let item of teamData" class="list-item">
+        <button class="btn btn-primary" (click)="selectTeam(item.teamId)">
+          {{ item.teamName }}
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col">
+    <h2>Team Details</h2>
+
+    <div *ngIf="teamDetails">
+      <div class="row">
+        <div class="col">
+          <!-- Manager Details -->
+          <div class="row">
+            <div class="list-group">
+              <h4>Manager</h4>
+              <div class="list-group-item">
+                <p><strong>Name:</strong> {{ teamDetails.manager.name }}</p>
+                <p><strong>Email:</strong> {{ teamDetails.manager.email }}</p>
+                <p>
+                  <strong>Phone:</strong>
+                  {{ teamDetails.manager.phoneNumber }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <!-- Developer Details -->
+            <h4>Developers</h4>
+            <div
+              *ngFor="let developer of teamDetails.developers"
+              class="developer-details list-group"
+            >
+              <div class="list-group-item m-1">
+                <p><strong>Name:</strong> {{ developer.name }}</p>
+                <p><strong>Email:</strong> {{ developer.email }}</p>
+                <p><strong>Phone:</strong> {{ developer.phoneNumber }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <h4>Projects</h4>
+          <div *ngIf="teamDetails.projects.length > 0; else noProjects">
+            <div
+              *ngFor="let project of teamDetails.projects"
+              class="list-group"
+            >
+              <div class="list-group-item">
+                <p><strong>Project Name:</strong> {{ project.projectName }}</p>
+                <p><strong>Description:</strong> {{ project.description }}</p>
+                <img
+                  [src]="project.projectImage"
+                  alt="Project Image"
+                  class="project-image"
+                />
+              </div>
+            </div>
+          </div>
+          <ng-template #noProjects>
+            <p>No projects assigned to this team.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <button class="btn btn-primary" (click)="OpenTeamModal()">
+      Create a New Team
+    </button>
+  </div>
+</div>
+
+<app-modal *ngIf="addTeamModal" [title]="'Add New Team'">
+  <form (ngSubmit)="AddTeam()" #projectForm="ngForm">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="teamName" class="form-label">Team Name</label>
+          <input
+            type="text"
+            id="teamName"
+            name="teamName"
+            class="form-control"
+            required
+            #teamName="ngModel"
+            [(ngModel)]="AddTeamData.teamName"
+          />
+          <div *ngIf="teamName.invalid && teamName.touched" class="text-danger">
+            Team name is required.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="managerId" class="form-label">Managed By</label>
+          <select
+            id="managerId"
+            name="managerId"
+            class="form-multi-select"
+            [(ngModel)]="AddTeamData.managerId"
+            required
+            #managerId="ngModel"
+            multiple
+            multiple
+            data-coreui-search="global"
+          >
+            <option [value]="" disabled selected>Select Manager</option>
+            <option *ngFor="let manager of managerList" [value]="manager.id">
+              {{ manager.name }}
+            </option>
+          </select>
+          <div
+            *ngIf="managerId.invalid && managerId.touched"
+            class="text-danger"
+          >
+            Please select a manager.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="developerIds" class="form-label">Developers</label>
+      <select
+        data-mdb-select-init
+        multiple
+        data-mdb-clear-button="true"
+        class="form-multi-select"
+        id="developerIds"
+        name="developerIds"
+        [(ngModel)]="AddTeamData.developerIds"
+        multiple
+        data-coreui-search="global"
+      >
+        <option *ngFor="let developer of developerList" [value]="developer.id">
+          {{ developer.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <div class="m-1">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!projectForm.valid"
+        >
+          Save
+        </button>
+      </div>
+      <div class="m-1">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="closeTeamModal()"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </form>
+</app-modal>

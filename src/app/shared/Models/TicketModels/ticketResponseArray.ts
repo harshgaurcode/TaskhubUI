@@ -1,12 +1,14 @@
+import { Guid } from 'guid-typescript';
+
 export interface ticketResponseArray {
-  id: string;
+  id: Guid;
   projectId: string;
   project: string;
   taskId: string;
   title: string;
   discription: string;
   type: string;
-  assigendToId: string;
+  assigendToId: Guid;
   assignedTo: string;
   status: number;
   relatedDocs: string;

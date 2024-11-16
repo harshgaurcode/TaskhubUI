@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../Auth/service/auth.service';
 import { Router } from '@angular/router';
-import { DialogService } from '../../shared/services/dialog.service';
 import { LayoutService } from '../service/layout.service';
 import { ModalService } from '../../shared/services/modal.service';
+import { TokenService } from '../../shared/services/token.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -17,13 +17,13 @@ export class MainLayoutComponent implements OnInit {
   constructor(
     private authservice: AuthService,
     private router: Router,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private tokenService: TokenService
   ) {}
   ngOnInit(): void {}
 
   logout() {
-    localStorage.removeItem('Token');
-    localStorage.removeItem('User');
+    this.tokenService.logout();
     this.router.navigateByUrl('auth');
   }
 

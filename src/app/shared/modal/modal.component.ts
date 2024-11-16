@@ -32,7 +32,6 @@ export class ModalComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    debugger;
     this.modalSub?.unsubscribe();
   }
 }
