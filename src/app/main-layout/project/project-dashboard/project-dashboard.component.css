@@ -1,0 +1,8 @@
+/* img {
+  height: 30px;
+} */
+
+.image img {
+  height: 300px; /* Limit the max height */
+  max-width: 100%; /* Limit the max width to the container's width */
+}

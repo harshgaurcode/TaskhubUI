@@ -35,7 +35,7 @@
               </div>
               <div class="col-9 text-end">
                 <p class="text-muted space-font m-0">
-                  {{ ticket.assignedTo }}
+                  {{ getDeveloperName(ticket.assigendToId) }}
                 </p>
               </div>
             </div>
@@ -49,6 +49,7 @@
             </div>
           </div>
         </div>
+        <!-- <i class="bi bi-trash" (click)="DeleteTicket(ticket.id)"></i> -->
         <div
           class="Add-button d-flex align-items-center flex-column"
           *ngIf="staus === 'To-Do'"

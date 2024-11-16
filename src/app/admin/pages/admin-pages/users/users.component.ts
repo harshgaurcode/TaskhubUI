@@ -21,15 +21,10 @@ export class UsersComponent implements OnInit {
   ) {}
   usersData: AllUsersModel[] = [];
   getAllUsers() {
-    this.adminService.getAllUsers().subscribe(
-      (response) => {
-        this.usersData = response.result;
-        console.log(this.usersData);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.adminService.getAllUsers().subscribe((response) => {
+      this.usersData = response.result;
+      console.log(this.usersData);
+    });
   }
 
   openConfirmationModal(userId: any) {
@@ -46,13 +41,8 @@ export class UsersComponent implements OnInit {
   deleteUser() {
     console.log('clicked');
     let userIdStr = String(this.userId);
-    this.adminService.deleteUser(userIdStr).subscribe(
-      (response) => {
-        console.log('User Deleted Successfully');
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.adminService.deleteUser(userIdStr).subscribe((response) => {
+      console.log('User Deleted Successfully');
+    });
   }
 }

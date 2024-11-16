@@ -8,7 +8,7 @@ import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.compone
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './service/auth.service';
-import { SpinnerComponent } from '../shared/spinner/spinner/spinner.component';
+
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({

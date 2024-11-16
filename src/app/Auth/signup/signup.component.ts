@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { UserRegisterModel } from '../../shared/Models/userRegisterModel';
 import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { Toast } from 'bootstrap';
+
 import { SnackbarService } from '../../shared/services/snackbar.service';
+import { SharedService } from '../../shared/services/shared.service';
 
 @Component({
   selector: 'app-signup',
@@ -15,20 +15,31 @@ export class SignupComponent {
   constructor(
     private authServices: AuthService,
     private router: Router,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private sharedMethods: SharedService
   ) {}
   RegisterCred: UserRegisterModel = new UserRegisterModel();
   isSuccess: boolean = false;
 
-  onFileChange(event: any, field: string) {
-    const file = event.target.files[0];
-    if (file) {
-      if (field === 'UserProfile') {
-        this.RegisterCred.userProfile = file; // Assign the actual file
-      } else if (field === 'Signature') {
-        this.RegisterCred.signature = file; // Assign the actual file
+  // onFileChange(event: any, field: string) {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     if (field === 'UserProfile') {
+  //       this.RegisterCred.userProfile = file; // Assign the actual file
+  //     } else if (field === 'Signature') {
+  //       this.RegisterCred.signature = file; // Assign the actual file
+  //     }
+  //   }
+  // }
+
+  onFileChange(event: any, type: string) {
+    this.sharedMethods.onFileChange(event, type, (file) => {
+      if (type === 'UserProfile') {
+        this.RegisterCred.userProfile = file;
+      } else if (type === 'Signature') {
+        this.RegisterCred.signature = file;
       }
-    }
+    });
   }
 
   onRegister() {
@@ -46,21 +57,14 @@ export class SignupComponent {
     formData.append('Password', this.RegisterCred.password);
     formData.append('UserName', this.RegisterCred.userName);
 
-    console.log(this.RegisterCred);
-    this.authServices.Register(formData).subscribe(
-      (response) => {
-        this.snackbarService.showinfo(
-          'We have sent An verification link to Your Registered Email Address ',
-          'Info'
-        );
-        setTimeout(() => {
-          this.router.navigateByUrl('');
-        }, 5000);
-      },
-      (error) => {
-        this.snackbarService.showerror('Something went wrong.', 'Error');
-        console.log('Registration failed', error);
-      }
-    );
+    this.authServices.Register(formData).subscribe((response) => {
+      this.snackbarService.showinfo(
+        'We have sent An verification link to Your Registered Email Address ',
+        'Info'
+      );
+      setTimeout(() => {
+        this.router.navigateByUrl('');
+      }, 5000);
+    });
   }
 }

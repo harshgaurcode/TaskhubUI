@@ -19,6 +19,7 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    SharedModule,
     ToastrModule.forRoot(),
   ],
   providers: [provideHttpClient(withInterceptors([AuthInterceptor]))],

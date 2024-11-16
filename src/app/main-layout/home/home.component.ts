@@ -4,6 +4,11 @@ import { ProjectService } from '../project/service/project.service';
 import { ProjectListResponse } from '../../shared/Models/ProjectModel/ProjectListResponse';
 import { LayoutService } from '../service/layout.service';
 import { TeamDetails } from '../../shared/Models/Admin/TeamData/teamDetails';
+import { SpinnerService } from '../../shared/services/spinner.service';
+import { ApiResponse } from '../../shared/Models/ApiResponse';
+import { User } from '../../shared/Models/Admin/TeamData/user';
+import { DatePipe } from '@angular/common';
+import { Quote } from '../../shared/Models/Quote';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +22,7 @@ export class HomeComponent implements OnInit {
   totalResults: number = 0;
   projectList: ProjectListResponse[] = [];
   constructor(
+    private _spinnerService: SpinnerService,
     private _service: ProjectService,
     private layoutService: LayoutService
   ) {}
@@ -27,20 +33,28 @@ export class HomeComponent implements OnInit {
     this.getNews();
     this.GetTeam();
   }
+  // getQuote() {
+  //   this.layoutService.getquote('success').subscribe((response) => {
+  //     this.quote = response;
+  //     console.log(response);
+  //   });
+  // }
   teamId = localStorage.getItem('TeamId') ?? '';
 
-  teamDetails: TeamDetails | null = null;
+  teamDetails: TeamDetails = {
+    manager: {
+      name: '',
+      email: '',
+      phoneNumber: '',
+      role: '',
+      userProfile: '',
+    },
+    developers: [],
+    projects: [],
+  };
 
   date_time: Date = new Date();
-  quote: string = '“Be yourself; everyone else is already taken.”';
-  getQuote() {
-    this._service.getquote().subscribe(
-      (res) => (this.quote = res),
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
+  quote: any;
   getNews() {
     this.layoutService.getNewsData().subscribe(
       (data) => {
@@ -55,25 +69,23 @@ export class HomeComponent implements OnInit {
     );
   }
   getAllProjects() {
-    this._service.projectList(this.teamId).subscribe(
-      (response: any) => (this.projectList = response.result),
-      (error) => {
-        console.error('Failed to load projects:', error);
-      }
-    );
+    this._spinnerService.show();
+    this._service
+      .projectList(this.teamId)
+      .subscribe((response: ApiResponse<any>) => {
+        this._spinnerService.hide();
+        this.projectList = response.result;
+      });
   }
   GetTeam() {
-    console.log(this.teamId);
-
-    this.layoutService.getTeamMembersData(this.teamId).subscribe(
-      (response) => {
-        console.log(response);
+    this.layoutService
+      .getTeamMembersData(this.teamId)
+      .subscribe((response: ApiResponse<any>) => {
         this.teamDetails = response.result;
-        console.log(this.teamDetails);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+        localStorage.setItem(
+          'Developers',
+          this.teamDetails.developers.toString()
+        );
+      });
   }
 }

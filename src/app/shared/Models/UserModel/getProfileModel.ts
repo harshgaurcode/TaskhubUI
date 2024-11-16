@@ -8,7 +8,7 @@ export interface GetProfileModel {
   email: string;
   role: string | null;
   signature: string;
-  profile: string;
+  userProfile: string;
   address: string;
   userContact: string;
 }

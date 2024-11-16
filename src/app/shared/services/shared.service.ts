@@ -1,45 +1,45 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 
-import { Toast } from 'bootstrap';
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
   private baseUrl = 'https://localhost:7054';
+  MAX_FILE_SIZE = 1 * 1024 * 1024; // 1 MB in bytes
+  ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png'];
   constructor() {}
 
   //Show Image
   getFullImageUrl(imagePath: string): string {
-    const removeWWWroot = imagePath.replace('/wwwroot', '');
-    return `${this.baseUrl}${removeWWWroot}`;
+    if (imagePath) {
+      const removeWWWroot = imagePath.replace('/wwwroot', '');
+      return `${this.baseUrl}${removeWWWroot}`;
+    }
+    return '';
   }
 
-  showToast(message: string, type: 'success' | 'error' = 'error'): void {
-    // Create toast element
-    const toast = document.createElement('div');
-    toast.className = `toast align-items-center  border-0`;
-    toast.role = 'alert';
-    toast.ariaLive = 'assertive';
-    toast.ariaAtomic = 'true';
-    toast.innerHTML = `
-      <div class="d-flex">
-        <div class="toast-body">
-          ${message}
-        </div>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-    `;
+  //For File handling
+  onFileChange(event: any, type: string, callback: (file: File) => void): void {
+    const file = event.target.files[0];
 
-    // Append toast to the body
-    document.body.appendChild(toast);
+    if (file) {
+      // Validate file size
+      if (file.size > this.MAX_FILE_SIZE) {
+        alert('File size exceeds 1 MB. Please upload a smaller image.');
+        event.target.value = ''; // Clear the file input
+        return;
+      }
 
-    // Initialize and show toast
+      // Validate file type
+      if (!this.ALLOWED_FILE_TYPES.includes(file.type)) {
+        alert('Invalid file format. Please upload a JPG or PNG image.');
+        event.target.value = ''; // Clear the file input
+        return;
+      }
 
-    const toastElement = new Toast(toast);
-    toastElement.show();
-    setTimeout(() => {
-      console.log('waiting');
-    }, 10000);
+      // Invoke the callback with the file if it's valid
+      callback(file);
+    }
   }
 }

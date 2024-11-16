@@ -17,7 +17,7 @@
           <button
             type="button"
             class="btn btn-primary btn-sm"
-            (click)="openModal()"
+            (click)="openEditModal()"
           >
             Edit Profile
           </button>
@@ -68,7 +68,7 @@
   </div>
 
   <!-- Edit Profile Modal -->
-  <app-modal [title]="'Edit Profile'">
+  <app-modal *ngIf="isEditModal" [title]="'Edit Profile'">
     <form #profileForm="ngForm">
       <!-- Full Name Field -->
       <div class="mb-3">
@@ -269,7 +269,11 @@
         </button>
       </div>
       <div class="m-1">
-        <button type="button" class="btn btn-primary" (click)="closeModal()">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="closeEditModal()"
+        >
           Close
         </button>
       </div>

@@ -8,6 +8,10 @@ import { SnackbarService } from '../../../shared/services/snackbar.service';
 
 import { ModalService } from '../../../shared/services/modal.service';
 import { NgForm } from '@angular/forms';
+import { switchMap } from 'rxjs';
+import { SharedService } from '../../../shared/services/shared.service';
+import { ApiResponse } from '../../../shared/Models/ApiResponse';
+import { Guid } from 'guid-typescript';
 
 @Component({
   selector: 'app-project-kanban',
@@ -26,16 +30,25 @@ export class ProjectKanbanComponent implements OnInit {
   draggedTicket: string = '';
   noData: boolean = false;
   ticketModal = false;
+  teamId: any;
   @ViewChild('ticketForm') ticketForm: NgForm | undefined;
   constructor(
     private service: ProjectService,
     private toastservice: SnackbarService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private sharedMethod: SharedService
   ) {}
   ngOnInit(): void {
     this.selectedProjectData = this.JsonData;
     this.getProjectTickets(this.projectId);
-    this.DevelopersList = JSON.parse(localStorage.getItem('Dev') || '[]');
+    this.teamId = localStorage.getItem('TeamId') ?? '';
+    this.Developers();
+  }
+  Developers() {
+    this.service.getDevelopers(this.teamId).subscribe((response: any) => {
+      this.DevelopersList = response.result;
+      console.log(`Developer:${this.DevelopersList}`);
+    });
   }
 
   openTicketModal() {
@@ -48,26 +61,28 @@ export class ProjectKanbanComponent implements OnInit {
     this.ticketModal = false;
   }
   getProjectTickets(id: any) {
-    this.service.getticketsbyprojectid(id).subscribe(
-      (response) => {
-        console.log(response);
-        this.ticketsArrays = response.result;
-        console.log(this.ticketsArrays);
-        this.loading = false;
-        console.log(this.ticketsArrays);
-        if (this.ticketsArrays.length == 0) {
-          this.toastservice.showinfo('No Data Found', 'No Data');
-          this.noData = true;
-        }
-      },
-      (error) => {
-        this.toastservice.showerror(
-          'Something went wrong please try again',
-          'Error'
-        );
-        console.log(error);
+    this.service.getticketsbyprojectid(id).subscribe((response) => {
+      console.log(response);
+      if (response.isSuccess === false) {
+        this.toastservice.showinfo('No Data Found', 'No Data');
+        this.noData = true;
       }
+      this.ticketsArrays = response.result;
+      console.log(this.ticketsArrays);
+      this.loading = false;
+      console.log(this.ticketsArrays);
+      if (this.ticketsArrays.length == 0) {
+        this.toastservice.showinfo('No Data Found', 'No Data');
+        this.noData = true;
+      }
+    });
+  }
+
+  getDeveloperName(assignedToId: Guid): string {
+    const developer = this.DevelopersList?.find(
+      (dev) => dev.id === assignedToId
     );
+    return developer ? developer.name : 'Unassigned';
   }
   onDragStart(ticket: string) {
     this.draggedTicket = ticket;
@@ -80,13 +95,20 @@ export class ProjectKanbanComponent implements OnInit {
     this.moveTicket(this.draggedTicket, status);
   }
   moveTicket(ticket: string, status: string) {
-    this.service.changestatus(ticket, status).subscribe(
-      (response) => {
-        console.log('moved'), this.getProjectTickets(this.projectId);
-      },
-      (error) => console.log('Not Moved')
-    );
-    console.log('moved');
+    this.service
+      .changestatus(ticket, status)
+      .pipe(switchMap(() => this.service.getticketsbyprojectid(this.projectId)))
+      .subscribe((response) => {
+        console.log(response);
+        this.ticketsArrays = response.result;
+        console.log(this.ticketsArrays);
+        this.loading = false;
+        console.log(this.ticketsArrays);
+        if (this.ticketsArrays.length == 0) {
+          this.toastservice.showinfo('No Data Found', 'No Data');
+          this.noData = true;
+        }
+      });
   }
   onDragOver(event: DragEvent) {
     event.preventDefault();
@@ -96,11 +118,14 @@ export class ProjectKanbanComponent implements OnInit {
     return this.ticketsArrays.filter((ticket) => ticket.type === status);
   }
 
-  onFileChange(event: any, arg1: string) {
-    const file = event.target.files;
-    if (file) {
-      this.taskData.relatedDocs = file; // Assign the actual file
-    }
+  onFileChange(event: any, type: string) {
+    this.sharedMethod.onFileChange(event, type, (file) => {
+      this.taskData.relatedDocs = file;
+    });
+  }
+  DeleteTicket(Id: any) {
+    const IdStr = Id.toString();
+    this.service.deleteTicket(Id);
   }
   onSubmit() {
     const formData = new FormData();
@@ -116,18 +141,19 @@ export class ProjectKanbanComponent implements OnInit {
     formData.append('EstimatedTime', this.taskData.estimatedTime.toString());
     formData.append('Priority', this.taskData.priority.toString());
 
-    this.service.AddTicket(formData).subscribe(
-      (response) => {
+    this.service
+      .AddTicket(formData)
+      .pipe(switchMap(() => this.service.getticketsbyprojectid(this.projectId)))
+      .subscribe((response) => {
         console.log(response);
-        this.toastservice.showsuccess(
-          'Ticket is submitted SuccessFully',
-          'Success'
-        );
-      },
-      (error) => {
-        this.toastservice.showerror('Ticket is submission is failed', 'Failed');
-        console.log(error);
-      }
-    );
+        this.ticketsArrays = response.result;
+        console.log(this.ticketsArrays);
+        this.loading = false;
+        console.log(this.ticketsArrays);
+        if (this.ticketsArrays.length == 0) {
+          this.toastservice.showinfo('No Data Found', 'No Data');
+          this.noData = true;
+        }
+      });
   }
 }

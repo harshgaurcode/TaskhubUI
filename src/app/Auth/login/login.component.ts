@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { AuthResult } from '../../shared/Models/AuthResponse';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { SpinnerService } from '../../shared/services/spinner.service';
+import { TokenService } from '../../shared/services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private authservice: AuthService,
     private router: Router,
-    private snackbarService: SnackbarService,
+    private tokenService: TokenService,
     private spinnerService: SpinnerService
   ) {}
   ngOnInit(): void {
@@ -29,33 +30,22 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     this.spinnerService.show();
-    this.authservice.Login(this.LoginCred).subscribe(
-      (response: ApiResponse<AuthResult>) => {
+    this.authservice
+      .Login(this.LoginCred)
+      .subscribe((response: ApiResponse<AuthResult>) => {
         this.isSubmitting = true;
         if (response.statusCode === 200) {
           this.isSubmitting = false;
-          this.spinnerService.hide(); // Hide spinner
-          this.snackbarService.showsuccess('Login was successful!', 'Success');
-          console.log('Login Successfull', response.result);
+          this.spinnerService.hide();
+          this.tokenService.setTokenData(response.result.token);
           localStorage.setItem('Token', response.result.token);
           localStorage.setItem('User', response.result.user.userName);
           localStorage.setItem('TeamId', response.result.user.teamId);
+
           setTimeout(() => {
             this.router.navigateByUrl('main');
           }, 3000);
-        } else {
-          this.isSubmitting = false;
-          this.spinnerService.hide(); // Hide spinner
-          this.snackbarService.showerror('Something went wrong.', 'Error');
-          console.log('Login Failed');
         }
-      },
-      (error) => {
-        this.isSubmitting = false;
-        this.spinnerService.hide();
-        this.snackbarService.showerror('Something went wrong.', 'Error');
-        console.log('An Error occurred', error);
-      }
-    );
+      });
   }
 }

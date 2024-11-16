@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserLoginModel } from '../../shared/Models/userLoginModel';
 import { Observable } from 'rxjs';
-import { UserRegisterModel } from '../../shared/Models/userRegisterModel';
 import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../../shared/Models/ApiResponse';
 import { AuthResult } from '../../shared/Models/AuthResponse';
@@ -30,9 +29,15 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<void> {
-    localStorage.removeItem('Token');
-    localStorage.removeItem('User');
-    return this.http.post<void>(this.apiUrl, {});
+  sendExpectionMail(expection: any, url: any): Observable<ApiResponse<any>> {
+    const body = {
+      toEmail: 'harshgaur724@gmail.com',
+      subject: `Expection In Api ${url}`,
+      body: expection.toString(),
+    };
+    return this.http.post<ApiResponse<any>>(
+      `${environment.apiBaseUrl}/api/Email/SendMail`,
+      body
+    );
   }
 }

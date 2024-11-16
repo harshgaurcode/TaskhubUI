@@ -20,53 +20,35 @@ export class ProjectService {
     );
   }
   projectList(teamId: string): Observable<ApiResponse<ProjectListResponse>> {
-    const headers = new HttpHeaders().set(
-      'Authorization',
-      `Bearer ${this.getToken()}`
-    );
     const params = new HttpParams().append('teamId', teamId);
-    console.log('TeamId', teamId);
 
     return this.http.get<ApiResponse<ProjectListResponse>>(
       `${environment.apiBaseUrl}/api/Project/GetProjects`,
-      { headers, params }
+      { params }
     );
   }
   AddProject(projectData: any): Observable<ApiResponse<any>> {
-    //Pass Jwt from internal storage
-    const headers = new HttpHeaders().set(
-      'Authorization',
-      `Bearer ${this.getToken()}`
-    );
     return this.http.post<ApiResponse<any>>(
       `${environment.apiBaseUrl}/api/Project/AddProject`,
       projectData,
-      { headers }
+      {}
     );
   }
 
-  getquote(): Observable<any> {
-    return this.http.get<any>('https://zenquotes.io/api/image');
-  }
-
   getticketsbyprojectid(
-    projectId: any
+    projectId: string
   ): Observable<ApiResponse<ticketResponseArray[]>> {
+    const params = new HttpParams().set('projectId', projectId);
     return this.http.get<ApiResponse<ticketResponseArray[]>>(
       `${environment.apiBaseUrl}/api/Project/GetTaskById/`,
       {
-        params: { projectId: projectId },
+        params,
       }
     );
   }
 
-  AddTicket(ticketData: any) {
-    //Pass Jwt from internal storage
-    const headers = new HttpHeaders().set(
-      'Authorization',
-      `Bearer ${this.getToken()}`
-    );
-    return this.http.post<any>(
+  AddTicket(ticketData: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(
       `${environment.apiBaseUrl}/api/Project/CreateTask/`,
       ticketData
     );
@@ -82,18 +64,32 @@ export class ProjectService {
       body
     );
   }
-  private getToken(): string {
-    return localStorage.getItem('Token') || '';
-  }
 
   deleteProject(projectId: string): Observable<ApiResponse<any>> {
-    const params = new HttpParams().append('projectId', projectId);
+    const params = new HttpParams().set('projectId', projectId);
     return this.http.post<ApiResponse<any>>(
       `${environment.apiBaseUrl}/api/Project/DeleteProject`,
       {},
       {
         params,
       }
+    );
+  }
+
+  getDevelopers(teamId: any): Observable<ApiResponse<any>> {
+    const params = new HttpParams().set('teamId', teamId);
+    return this.http.get<ApiResponse<any>>(
+      `${environment.apiBaseUrl}/api/Admin/GetAllDeveloper`,
+      { params }
+    );
+  }
+
+  deleteTicket(Id: string): Observable<ApiResponse<any>> {
+    const params = new HttpParams().set('taskId', Id);
+    return this.http.post<ApiResponse<any>>(
+      `${environment.apiBaseUrl}/api/Project/DeleteTask`,
+      {},
+      { params }
     );
   }
 }

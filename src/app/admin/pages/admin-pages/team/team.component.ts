@@ -38,29 +38,20 @@ export class TeamComponent implements OnInit {
   developerList: CommonModel[] = [];
   teamDetails: TeamDetails | null = null;
   getTeamList() {
-    this.adminService.getTeam().subscribe(
-      (result: any) => {
-        console.log(result);
-        this.teamData = result;
-        console.log(this.teamData);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.spinnerService.show();
+    this.adminService.getTeam().subscribe((result: any) => {
+      this.spinnerService.hide();
+
+      this.teamData = result;
+    });
   }
   getUnlistedEmployees() {
-    this.adminService.getUnlistedEmployees().subscribe(
-      (data) => {
-        console.log(data);
-        this.managerList = data.result.managers;
-        this.developerList = data.result.developers;
-        console.log(this.managerList, this.developerList);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.spinnerService.show();
+    this.adminService.getUnlistedEmployees().subscribe((data) => {
+      this.spinnerService.hide();
+      this.managerList = data.result.managers;
+      this.developerList = data.result.developers;
+    });
   }
 
   closeTeamModal() {
@@ -72,18 +63,10 @@ export class TeamComponent implements OnInit {
     this.modalService.openModal();
   }
   selectTeam(teamId: any) {
-    console.log(teamId);
     var teamIdStr = String(teamId);
-    this.adminService.getTeamMembersData(teamIdStr).subscribe(
-      (response) => {
-        console.log(response);
-        this.teamDetails = response.result;
-        console.log(this.teamDetails);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.adminService.getTeamMembersData(teamIdStr).subscribe((response) => {
+      this.teamDetails = response.result;
+    });
   }
 
   AddTeam() {

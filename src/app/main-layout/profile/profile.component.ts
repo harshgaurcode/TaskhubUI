@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LayoutService } from '../service/layout.service';
 import { profileModel } from '../../shared/Models/UserModel/profileModel';
@@ -9,16 +8,17 @@ import { SpinnerService } from '../../shared/services/spinner.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { ModalService } from '../../shared/services/modal.service';
 import { GetProfileModel } from '../../shared/Models/UserModel/getProfileModel';
+import { ApiResponse } from '../../shared/Models/ApiResponse';
+import { switchMap } from 'rxjs';
+import { TokenService } from '../../shared/services/token.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-  token: string | null = localStorage.getItem('Token');
-  userId: string = '';
-  decodedToken: any;
-  dataLoaded: boolean = true;
+  userId: string | null = '';
+
   UserImagePath: string = '';
   userProfileImageUrl: string = '';
   userSignatureImageUrl: string = '';
@@ -43,7 +43,7 @@ export class ProfileComponent implements OnInit {
     email: '',
     role: null,
     signature: '',
-    profile: '',
+    userProfile: '',
     address: '',
     userContact: '',
     Password: '',
@@ -57,67 +57,67 @@ export class ProfileComponent implements OnInit {
     private sharedMethods: SharedService,
     private spinnerService: SpinnerService,
     private snackbarService: SnackbarService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private tokenService: TokenService
   ) {}
+
+  isEditModal: boolean = false;
   ngOnInit(): void {
-    if (this.token) {
-      this.decodedToken = jwtDecode(this.token);
-      this.userId = this.decodedToken.UserId;
-      console.log(this.userId);
-      this.getUserProfile(this.decodedToken.UserId);
-    } else {
-      console.error('No token found');
-    }
+    this.userId = this.tokenService.getUserId();
+    this.getUserProfile(this.userId);
   }
 
-  //Modal Toggel Methods
-  openModal() {
+  openEditModal() {
+    this.isEditModal = true;
     this.modalService.openModal();
   }
-  closeModal() {
+  closeEditModal() {
+    this.isEditModal = false;
     this.modalService.closeModal();
   }
 
   getUserProfile(userId: any) {
-    this.dataLoaded = false;
     this.spinnerService.show();
-    this._service.getUserProfile(userId).subscribe(
-      (profile) => {
-        this.getProfiledata = profile;
-        console.log(this.getProfiledata);
-        this.dataLoaded = true;
+    this._service
+      .getUserProfile(userId)
+      .subscribe((profile: ApiResponse<any>) => {
+        this.getProfiledata = profile.result;
+
         this.spinnerService.hide();
         if (this.profileData) {
           this.userProfileImageUrl = this.sharedMethods.getFullImageUrl(
-            this.getProfiledata.profile
-          );
-          this.userSignatureImageUrl = this.sharedMethods.getFullImageUrl(
-            this.getProfiledata.signature
+            this.getProfiledata.userProfile
           );
         } else {
           console.error('Profile data is null');
         }
         console.log(this.profileData);
-      },
-      (error) => {
-        this.spinnerService.hide();
-      }
-    );
+      });
   }
-  onFileChange(event: any, field: string) {
-    const file = event.target.files[0];
-    if (file) {
-      if (field === 'userProfile') {
-        this.profileData.profile = file; // Assign the actual file
-      } else if (field === 'signature') {
-        this.profileData.signature = file; // Assign the actual file
+  // onFileChange(event: any, field: string) {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     if (field === 'userProfile') {
+  //       this.profileData.profile = file; // Assign the actual file
+  //     } else if (field === 'signature') {
+  //       this.profileData.signature = file; // Assign the actual file
+  //     }
+  //   }
+  // }
+
+  onFileChange(event: any, type: string) {
+    this.sharedMethods.onFileChange(event, type, (file) => {
+      if (type === 'userProfile') {
+        this.profileData.profile = file;
+      } else if (type === 'signature') {
+        this.profileData.signature = file;
       }
-    }
+    });
   }
 
   updateUserProfile() {
     const formData = new FormData();
-    formData.append('UserId', this.userId.toString());
+    formData.append('UserId', this.userId ? this.userId.toString() : '');
     formData.append('AlternateContact', this.profileData.AlternateContact);
     formData.append('Name', this.profileData.Name);
     formData.append('Address', this.profileData.address);
@@ -130,19 +130,25 @@ export class ProfileComponent implements OnInit {
     formData.append('Signature', this.profileData.signature);
 
     this.spinnerService.show();
-    this._service.updateUserProfile(formData).subscribe(
-      (response) => {
+    this._service
+      .updateUserProfile(formData)
+      .pipe(switchMap(() => this._service.getUserProfile(this.userId)))
+      .subscribe((profile: ApiResponse<any>) => {
+        this.getProfiledata = profile.result;
+        console.log(this.getProfiledata);
+
         this.spinnerService.hide();
-        this.snackbarService.showsuccess('User Profile Updated Successfully');
-        console.log('User profile updated successfully', response);
-      },
-      (error) => {
-        this.spinnerService.hide();
-        this.snackbarService.showsuccess(
-          'something went wrong please retry later'
-        );
-        console.error('Error updating user profile', error);
-      }
-    );
+        if (this.profileData) {
+          this.userProfileImageUrl = this.sharedMethods.getFullImageUrl(
+            this.getProfiledata.userProfile
+          );
+          this.userSignatureImageUrl = this.sharedMethods.getFullImageUrl(
+            this.getProfiledata.signature
+          );
+        } else {
+          console.error('Profile data is null');
+        }
+        console.log(this.profileData);
+      });
   }
 }

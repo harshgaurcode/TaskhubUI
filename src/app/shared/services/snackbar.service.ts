@@ -16,6 +16,6 @@ export class SnackbarService {
   }
 
   showinfo(message: string, title: string) {
-    this.toastr.info(message, title, { closeButton: true, timeOut: 500 });
+    this.toastr.info(message, title, { closeButton: true, timeOut: 1800 });
   }
 }
