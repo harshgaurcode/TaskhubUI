@@ -19,7 +19,7 @@
     "@angular/platform-browser-dynamic": "^18.1.0",
     "@angular/router": "^18.1.0",
     "@microsoft/signalr": "^8.0.7",
-    "@ng-bootstrap/ng-bootstrap": "^16.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^17.0.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "guid-typescript": "^1.0.9",
