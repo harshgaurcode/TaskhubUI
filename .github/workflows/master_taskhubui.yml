@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - TaskhubUI
+name: Build and deploy Node.js app to Azure Web App - TaskhubUi
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -19,19 +19,22 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: '18.x'
 
       - name: npm install, build, and test
         run: |
           npm install
           npm run build --if-present
           npm run test --if-present
-      
+
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,19 +50,22 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
+
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5BDC7533B07F4631B9A5E0206A4565D6 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_705DA7153BD445EDAD212811B91732C5 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DC312EAD35584A1AB5065C9F3EBB888A }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_AD66EF88D8F842228121CA7674022B4A }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BE756A4CB2B34652A06353290E161EE3 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_25E524438CF4421291EA673CF3B1BE1D }}
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
         with:
-          app-name: 'TaskhubUI'
+          app-name: 'TaskhubUi'
           slot-name: 'Production'
           package: .
           
