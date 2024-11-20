@@ -3,11 +3,13 @@ import { UserLoginModel } from '../../shared/Models/userLoginModel';
 import { AuthService } from '../service/auth.service';
 import { ApiResponse } from '../../shared/Models/ApiResponse';
 import { Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { AuthResult } from '../../shared/Models/AuthResponse';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { SpinnerService } from '../../shared/services/spinner.service';
 import { TokenService } from '../../shared/services/token.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',

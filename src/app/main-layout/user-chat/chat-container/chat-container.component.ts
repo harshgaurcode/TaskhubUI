@@ -3,6 +3,7 @@ import { ChatserviceService } from '../services/chatservice.service';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscribable } from 'rxjs';
 import { HubConnection } from '@microsoft/signalr';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-chat-container',

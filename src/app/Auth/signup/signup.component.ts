@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { UserRegisterModel } from '../../shared/Models/userRegisterModel';
 import { AuthService } from '../service/auth.service';
 import { Router } from '@angular/router';
-
+import { NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { SharedService } from '../../shared/services/shared.service';
 
