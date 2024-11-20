@@ -25,6 +25,7 @@ import { SharedModule } from '../shared/shared.module';
     HttpClientModule,
     SharedModule,
   ],
+  exports: [AuthComponent],
   providers: [AuthService],
 })
 export class AuthModule {}
